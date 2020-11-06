@@ -1,0 +1,4 @@
+﻿  main.cpp
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\src\main.cpp(20,33): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\src\main.cpp(21,34): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+  game.vcxproj -> E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\x64\Debug\game.exe
