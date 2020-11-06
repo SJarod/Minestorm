@@ -1,4 +1,8 @@
 ﻿  main.cpp
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\src\main.cpp(20,33): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\src\main.cpp(21,34): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
-  game.vcxproj -> E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\x64\Debug\game.exe
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(20,33): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(21,34): warning C4244: '=' : conversion de 'int' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(40,57): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(41,57): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(42,57): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\main.cpp(43,57): warning C4244: 'argument' : conversion de 'double' en 'float', perte possible de données
+  game.vcxproj -> E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\x64\Debug\game.exe

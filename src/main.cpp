@@ -20,6 +20,8 @@ int main(int argc, char* argv[])
     rect.center.x = screenWidth / 2;
     rect.center.y = screenHeight / 2;
 
+    float axis = 0.f;
+
     Texture2D texBackGround = LoadTexture("Assets/minestorm_background.png");
     Texture2D texHUD = LoadTexture("Assets/minestorm_forground.png");
 
@@ -31,15 +33,21 @@ int main(int argc, char* argv[])
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
-        DrawTexture(texHUD, 0, 0, RAYWHITE);
+        axis = IsKeyDown(KEY_R);
 
-        rect.center.x += (IsKeyDown(KEY_G) - IsKeyDown(KEY_D)) * 4;
-        rect.center.y += (IsKeyDown(KEY_F) - IsKeyDown(KEY_R)) * 4;
+        rect.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4;
+
+        rect.center.x += (axis * cosf(rect.angle * M_PI / 180)
+                        + axis * sinf(rect.angle * M_PI / 180)) * 4;
+        rect.center.y += (axis * cosf(rect.angle * M_PI / 180)
+                        - axis * sinf(rect.angle * M_PI / 180)) * 4;
 
         rect.center.x = Math::clamp(rect.center.x, 80, 560);
         rect.center.y = Math::clamp(rect.center.y, 100, 636);
 
         DrawRectangleRec(rect, RED);
+
+        DrawTexture(texHUD, 0, 0, RAYWHITE);
 
         EndDrawing();
     }

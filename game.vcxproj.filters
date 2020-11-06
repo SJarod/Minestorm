@@ -7,6 +7,8 @@
     <ClCompile Include="src\player.cpp" />
     <ClCompile Include="src\myvector2.cpp" />
     <ClCompile Include="src\myrectangle.cpp" />
+    <ClCompile Include="src\myconvexpolygon.cpp" />
+    <ClCompile Include="src\myconcavepolygon.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\math.hpp" />
@@ -14,5 +16,7 @@
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\myrectangle.hpp" />
     <ClInclude Include="include\myvector2.hpp" />
+    <ClInclude Include="include\myconvexpolygon.hpp" />
+    <ClInclude Include="include\myconcavepolygon.hpp" />
   </ItemGroup>
 </Project>

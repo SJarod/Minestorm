@@ -2,3 +2,5 @@ C:\Users\p.galindo\Documents\dev\raytest2\x64\Debug\game.exe
 C:\Users\p.galindo\Documents\dev\raytest2\x64\Debug\game.pdb
 E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\x64\Debug\game.exe
 E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\x64\Debug\game.pdb
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\x64\Debug\game.exe
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\x64\Debug\game.pdb

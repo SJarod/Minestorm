@@ -10,6 +10,7 @@ public:
     MyVector2   center;
     float       width;
     float       height;
+    float       angle;
 
     MyRectangle();
     MyRectangle(float x, float y, float width, float height);
