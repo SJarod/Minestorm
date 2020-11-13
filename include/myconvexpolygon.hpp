@@ -5,9 +5,13 @@
 class MyConvexPolygon
 {
 public:
+    MyVector2  center;
+
     MyVector2* points;    //array of points
+    int        count;
+
+    float      angle;
 
     MyConvexPolygon();
-
-    void draw();
+    MyConvexPolygon(MyVector2* ptr);
 };

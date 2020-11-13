@@ -92,17 +92,26 @@
     <ClCompile Include="src\myconcavepolygon.cpp" />
     <ClCompile Include="src\myconvexpolygon.cpp" />
     <ClCompile Include="src\myrectangle.cpp" />
+    <ClCompile Include="src\myreferential2.cpp" />
     <ClCompile Include="src\myvector2.cpp" />
     <ClCompile Include="src\player.cpp" />
+    <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\bullet.hpp" />
+    <ClInclude Include="include\enemy.hpp" />
     <ClInclude Include="include\entity.hpp" />
     <ClInclude Include="include\math.hpp" />
+    <ClInclude Include="include\mycircle.hpp" />
     <ClInclude Include="include\myconcavepolygon.hpp" />
     <ClInclude Include="include\myconvexpolygon.hpp" />
     <ClInclude Include="include\myrectangle.hpp" />
+    <ClInclude Include="include\myreferential2.hpp" />
     <ClInclude Include="include\myvector2.hpp" />
     <ClInclude Include="include\player.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\world.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

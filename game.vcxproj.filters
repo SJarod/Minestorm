@@ -9,6 +9,8 @@
     <ClCompile Include="src\myrectangle.cpp" />
     <ClCompile Include="src\myconvexpolygon.cpp" />
     <ClCompile Include="src\myconcavepolygon.cpp" />
+    <ClCompile Include="src\world.cpp" />
+    <ClCompile Include="src\myreferential2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\math.hpp" />
@@ -18,5 +20,12 @@
     <ClInclude Include="include\myvector2.hpp" />
     <ClInclude Include="include\myconvexpolygon.hpp" />
     <ClInclude Include="include\myconcavepolygon.hpp" />
+    <ClInclude Include="include\myreferential2.hpp" />
+    <ClInclude Include="include\bullet.hpp" />
+    <ClInclude Include="include\enemy.hpp" />
+    <ClInclude Include="include\mycircle.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="include\world.hpp" />
   </ItemGroup>
 </Project>
