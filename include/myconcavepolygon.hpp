@@ -2,10 +2,14 @@
 
 #include "myconvexpolygon.hpp"
 
+#include <vector>
+
 class MyConcavePolygon
 {
 public:
-	MyConvexPolygon* polygons;	//array of convex polygons
+	std::vector<MyConvexPolygon> polygons;	//array of convex polygons
 
 	MyConcavePolygon();
+
+	MyConcavePolygon operator=(MyConvexPolygon convex);
 };

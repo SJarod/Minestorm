@@ -1,9 +1,27 @@
 #pragma once
 
+#include "raylib.h"
+
 #include "world.hpp"
 #include "entity.hpp"
 
 #include "myconvexpolygon.hpp"
+
+struct InputPlayerOne
+{
+	int		movingForward = IsKeyDown(KEY_R);
+	float	rotateRight = IsKeyDown(KEY_G);
+	float	rotateLeft = IsKeyDown(KEY_D);
+	int		shooting = IsKeyDown(KEY_F);
+};
+
+struct InputPlayerTwo
+{
+	int		movingForward = IsKeyDown(KEY_I);
+	float	rotateRight = IsKeyDown(KEY_L);
+	float	rotateLeft = IsKeyDown(KEY_J);
+	int		shooting = IsKeyDown(KEY_K);
+};
 
 class Player : public Entity
 {
@@ -11,14 +29,10 @@ private:
 	int	m_health = 3;
 
 public:
-	MyConvexPolygon shape;
-
 	Player();
 	Player(World game);
 	~Player();
 
 	void move();
 	void update();
-
-	void draw() const override;
 };

@@ -5,6 +5,7 @@
 
 #include "world.hpp"
 #include "player.hpp"
+#include "enemy.hpp"
 
 #include "math.hpp"
 #include "myrectangle.hpp"
@@ -20,15 +21,12 @@ int main(int argc, char* argv[])
     World game(screenWidth, screenHeight);
 
     Player player(game);
+    Enemy enemy(game);
 
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
 
-    MyRectangle rect;
-    rect.center.x = game.center.x;
-    rect.center.y = game.center.y;
-
-    int moving = 0.f;
+    int moving = 0;
 
     Texture2D texBackGround = LoadTexture("Assets/minestorm_background.png");
     Texture2D texHUD = LoadTexture("Assets/minestorm_forground.png");
@@ -41,30 +39,29 @@ int main(int argc, char* argv[])
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
+        //TODO : move moving variable in player.cpp,Player::move();
         moving = IsKeyDown(KEY_R) * 2 - 1;  //true : moving = 1, false : moving = -1
         player.thrust += moving / 10.f;
         player.thrust = Math::clamp(player.thrust, 0, 7);
 
-        player.shape.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4;
+        player.shape.polygons[0].angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4;
 
-        //player.shape.center.x = Math::clamp(player.shape.center.x, 80, 560);
-        //player.shape.center.y = Math::clamp(player.shape.center.y, 100, 636);
-
-        if (player.shape.center.x < 40)
+        //TODO : move edge function in world.hpp and .cpp
+        if (player.shape.polygons[0].center.x < 40)
         {
-            player.shape.center.x = screenWidth - 40;
+            player.shape.polygons[0].center.x = screenWidth - 40;
         }
-        if (player.shape.center.x > screenWidth - 40)
+        if (player.shape.polygons[0].center.x > screenWidth - 40)
         {
-            player.shape.center.x = 40;
+            player.shape.polygons[0].center.x = 40;
         }
-        if (player.shape.center.y < 40)
+        if (player.shape.polygons[0].center.y < 40)
         {
-            player.shape.center.y = screenHeight - 60;
+            player.shape.polygons[0].center.y = screenHeight - 60;
         }
-        if (player.shape.center.y > screenHeight - 60)
+        if (player.shape.polygons[0].center.y > screenHeight - 60)
         {
-            player.shape.center.y = 40;
+            player.shape.polygons[0].center.y = 40;
         }
 
         player.update();
@@ -72,13 +69,8 @@ int main(int argc, char* argv[])
 
         //TODO: SAT
 
-        //std::cout << player.movement.x << std::endl;
-        //std::cout << player.movement.y << std::endl;
-        //std::cout << player.shape.angle << std::endl;
-
         player.draw();
-
-        // DrawRectangleRec(rect, RED);
+        enemy.draw();
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 

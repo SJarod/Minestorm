@@ -14,7 +14,6 @@ public:
     static const MyVector2 down;
     static const MyVector2 left;
 
-    float       magnitudeVect();
     MyVector2   normalizeVect();
 
     //return a null vector

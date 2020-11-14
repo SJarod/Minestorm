@@ -2,6 +2,7 @@
 
 #include "myvector2.hpp"
 #include "myreferential2.hpp"
+#include "myconcavepolygon.hpp"
 
 class Entity
 {
@@ -9,9 +10,10 @@ private:
 
 public:
 	MyReferential2	local;
+	MyConcavePolygon shape;
 
 	MyVector2		direction;	//direction vector
 	float			thrust;
 
-	virtual void draw() const;
+	void draw() const;
 };

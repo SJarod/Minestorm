@@ -11,6 +11,8 @@
     <ClCompile Include="src\myconcavepolygon.cpp" />
     <ClCompile Include="src\world.cpp" />
     <ClCompile Include="src\myreferential2.cpp" />
+    <ClCompile Include="src\enemy.cpp" />
+    <ClCompile Include="src\collisiondetection.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\math.hpp" />
@@ -24,6 +26,7 @@
     <ClInclude Include="include\bullet.hpp" />
     <ClInclude Include="include\enemy.hpp" />
     <ClInclude Include="include\mycircle.hpp" />
+    <ClInclude Include="include\collisiondetection.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\world.hpp" />

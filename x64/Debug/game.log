@@ -1,21 +1,5 @@
 ﻿  player.cpp
 E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\include\math.hpp(3,1): warning C4005: 'FLT_EPSILON' : redéfinition de macro
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\float.h(83): message : voir la définition précédente de 'FLT_EPSILON'
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(79,20): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(87,112): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(87,77): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(87,42): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(87,26): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(88,112): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(88,77): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(88,42): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(88,26): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(89,114): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(89,78): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(89,42): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(89,26): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(98,130): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(98,91): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(98,52): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
-E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(98,33): warning C4244: 'argument' : conversion de 'float' en 'int', perte possible de données
+E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\src\player.cpp(116,20): warning C4244: 'initialisation' : conversion de 'double' en 'float', perte possible de données
   game.vcxproj -> E:\Téléchargements\prgm\env-master\cygwin64\home\jarod\Minestorm\GP1_SENGKEO_J\x64\Debug\game.exe

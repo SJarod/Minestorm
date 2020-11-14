@@ -23,15 +23,10 @@ MyVector2::MyVector2(float x, float y)
     this->y = y;
 }
 
-float MyVector2::magnitudeVect()
-{
-    return sqrtf(x * x + y * y);
-}
-
 MyVector2 MyVector2::normalizeVect()
 {
     MyVector2 nVect;
-    float mag = magnitudeVect();
+    float mag = vectorMagnitude();
     return *this / (mag == 0 ? 1 : mag);
 }
 
@@ -224,6 +219,9 @@ MyVector2 MyVector2::operator+(MyVector2 vect) const
 
 MyVector2& MyVector2::operator+=(MyVector2 vect)
 {
+    x += vect.x;
+    y += vect.y;
+
     return *this;
 }
 

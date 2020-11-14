@@ -4,6 +4,7 @@
 
 #include "myvector2.hpp"
 #include "myconvexpolygon.hpp"
+#include "world.hpp"
 
 class Enemy : public Entity
 {
@@ -11,12 +12,13 @@ private:
 
 protected:
 	MyVector2 m_spawnPoint;
-	MyConvexPolygon m_shape;
 
 public:
-	void drawSpawnPoint();
+	Enemy();
+	Enemy(World game);
+	~Enemy();
 
-	void draw() const override;
+	void drawSpawnPoint();
 };
 
 class FloatingMine : public Enemy
