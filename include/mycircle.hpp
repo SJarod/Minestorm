@@ -8,6 +8,6 @@ public:
     MyCircle();
     MyCircle(MyVector2 c, float r);
 
-    MyVector2 center;
-    float   radius;
+    MyVector2   center;
+    float       radius;
 };

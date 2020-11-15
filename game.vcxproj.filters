@@ -13,6 +13,9 @@
     <ClCompile Include="src\myreferential2.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\collisiondetection.cpp" />
+    <ClCompile Include="src\myrange.cpp" />
+    <ClCompile Include="src\bullet.cpp" />
+    <ClCompile Include="src\mycircle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\math.hpp" />
@@ -27,6 +30,7 @@
     <ClInclude Include="include\enemy.hpp" />
     <ClInclude Include="include\mycircle.hpp" />
     <ClInclude Include="include\collisiondetection.hpp" />
+    <ClInclude Include="include\myrange.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\world.hpp" />

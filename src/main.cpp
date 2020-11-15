@@ -1,11 +1,15 @@
 
 #include <raylib.h>
 
+#include <time.h>
+
 #include <iostream>
 
 #include "world.hpp"
 #include "player.hpp"
 #include "enemy.hpp"
+
+#include "collisiondetection.hpp"
 
 #include "math.hpp"
 #include "myrectangle.hpp"
@@ -18,10 +22,13 @@ int main(int argc, char* argv[])
     int screenWidth = 640;
     int screenHeight = 800;
 
+    srand(time(0));
+
     World game(screenWidth, screenHeight);
 
+    //TODO : move player and enemy to class World (std::vector)
     Player player(game);
-    Enemy enemy(game);
+    FireballMine enemy(game);
 
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
@@ -31,9 +38,16 @@ int main(int argc, char* argv[])
     Texture2D texBackGround = LoadTexture("Assets/minestorm_background.png");
     Texture2D texHUD = LoadTexture("Assets/minestorm_forground.png");
 
+    float deltaTime;
+    float currentTime;
+    float previousTime = 0.f;
+
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        deltaTime = GetFrameTime() * 50;
+        currentTime = GetTime();
+
         BeginDrawing();
         ClearBackground(RAYWHITE);
 
@@ -41,36 +55,50 @@ int main(int argc, char* argv[])
 
         //TODO : move moving variable in player.cpp,Player::move();
         moving = IsKeyDown(KEY_R) * 2 - 1;  //true : moving = 1, false : moving = -1
-        player.thrust += moving / 10.f;
-        player.thrust = Math::clamp(player.thrust, 0, 7);
+        player.m_thrust += moving / 10.f * deltaTime;
+        player.m_thrust = Math::clamp(player.m_thrust, 0, 7);
 
-        player.shape.polygons[0].angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4;
+        for (auto& polygons : player.m_shape.polygons)
+            polygons.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4 * deltaTime;
 
-        //TODO : move edge function in world.hpp and .cpp
-        if (player.shape.polygons[0].center.x < 40)
+        game.playerOnEdge(player);
+
+        player.update(deltaTime);
+        player.move(game, deltaTime);
+
+        if (IsKeyDown(KEY_F))
         {
-            player.shape.polygons[0].center.x = screenWidth - 40;
-        }
-        if (player.shape.polygons[0].center.x > screenWidth - 40)
-        {
-            player.shape.polygons[0].center.x = 40;
-        }
-        if (player.shape.polygons[0].center.y < 40)
-        {
-            player.shape.polygons[0].center.y = screenHeight - 60;
-        }
-        if (player.shape.polygons[0].center.y > screenHeight - 60)
-        {
-            player.shape.polygons[0].center.y = 40;
+            if (currentTime - previousTime >= 0.1f * deltaTime)
+            {
+                previousTime = GetTime();
+                player.shoot(previousTime);
+            }
         }
 
-        player.update();
-        player.move();
+        Collide::cBulletEnemy(player, enemy);
 
-        //TODO: SAT
+        for (auto& bullets : player.m_bullet)
+        {
+            if (currentTime - bullets.m_lifeTime >= 1.f * deltaTime)
+            {
+                player.m_bullet.erase(player.m_bullet.begin());
+            }
 
-        player.draw();
-        enemy.draw();
+            bullets.move(deltaTime);
+            game.bulletOnEdge(bullets);
+            bullets.draw(YELLOW);
+        }
+
+        if (Collide::cPlayerEnemy(player, enemy))
+        {
+            player.draw(RED);
+            enemy.draw(RED);
+        }
+        else
+        {
+            player.draw(GREEN);
+            enemy.draw(GREEN);
+        }
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 

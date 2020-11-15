@@ -86,13 +86,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\bullet.cpp" />
     <ClCompile Include="src\collisiondetection.cpp" />
     <ClCompile Include="src\enemy.cpp" />
     <ClCompile Include="src\entity.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\math.cpp" />
+    <ClCompile Include="src\mycircle.cpp" />
     <ClCompile Include="src\myconcavepolygon.cpp" />
     <ClCompile Include="src\myconvexpolygon.cpp" />
+    <ClCompile Include="src\myrange.cpp" />
     <ClCompile Include="src\myrectangle.cpp" />
     <ClCompile Include="src\myreferential2.cpp" />
     <ClCompile Include="src\myvector2.cpp" />
@@ -108,6 +111,7 @@
     <ClInclude Include="include\mycircle.hpp" />
     <ClInclude Include="include\myconcavepolygon.hpp" />
     <ClInclude Include="include\myconvexpolygon.hpp" />
+    <ClInclude Include="include\myrange.hpp" />
     <ClInclude Include="include\myrectangle.hpp" />
     <ClInclude Include="include\myreferential2.hpp" />
     <ClInclude Include="include\myvector2.hpp" />

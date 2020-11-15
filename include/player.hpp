@@ -4,6 +4,7 @@
 
 #include "world.hpp"
 #include "entity.hpp"
+#include "bullet.hpp"
 
 #include "myconvexpolygon.hpp"
 
@@ -26,13 +27,17 @@ struct InputPlayerTwo
 class Player : public Entity
 {
 private:
-	int	m_health = 3;
+	int					m_health = 3;
 
 public:
+	std::vector<Bullet> m_bullet;
+
 	Player();
 	Player(World game);
 	~Player();
-
-	void move();
-	void update();
+	
+	void shoot(float currentTime);
+	void move(World game, float deltaTime);
+	void teleport(World game);
+	void update(float deltaTime);
 };

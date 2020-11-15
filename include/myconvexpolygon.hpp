@@ -5,12 +5,12 @@
 class MyConvexPolygon
 {
 public:
-    MyVector2  center;
+    MyVector2   center;
 
-    MyVector2* points;    //array of points
-    int        count;
+    MyVector2*  points;    //array of points
+    int         count;
 
-    float      angle;
+    float       angle;
 
     MyConvexPolygon();
     MyConvexPolygon(MyVector2* ptr);
