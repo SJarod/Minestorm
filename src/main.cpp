@@ -26,9 +26,11 @@ int main(int argc, char* argv[])
 
     World game(screenWidth, screenHeight);
 
+    //TODO : menu
+
     //TODO : move player and enemy to class World (std::vector)
     Player player(game);
-    FireballMine enemy(game);
+    FloatingMine enemy(game);
 
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
@@ -50,6 +52,8 @@ int main(int argc, char* argv[])
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
+
+        //TODO : move all to a function gameLoop();
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 

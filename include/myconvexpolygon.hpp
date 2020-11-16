@@ -7,6 +7,7 @@ class MyConvexPolygon
 public:
     MyVector2   center;
 
+    //TODO : std::vector
     MyVector2*  points;    //array of points
     int         count;
 

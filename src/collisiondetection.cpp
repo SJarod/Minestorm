@@ -176,6 +176,7 @@ bool	Collide::cConvexConvex(MyConvexPolygon p1, MyConvexPolygon p2)
     return true;
 }
 
+//TODO : add AABB
 //TODO : cConcaveConcave()
 bool	Collide::cPlayerEnemy(Player& player, Enemy& enemy)
 {
