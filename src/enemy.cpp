@@ -22,6 +22,11 @@ Enemy::~Enemy()
     }
 }
 
+void Enemy::move(float deltaTime)
+{
+
+}
+
 FloatingMine::FloatingMine()
 {
 }

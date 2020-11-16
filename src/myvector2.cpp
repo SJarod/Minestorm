@@ -133,27 +133,10 @@ float MyVector2::dotProduct(MyVector2 vector)
 
 float MyVector2::vectorAngle(MyVector2 vector)
 {
-    float angle1, angle2;
+    float dotProduct    = x * vector.x + y * vector.y;
+    float crossProduct  = x * vector.y - y * vector.x;
 
-    if (x == 0)
-    {
-        angle1 = M_PI / 2 * y / fabsf(y);
-    }
-    else
-    {
-        angle1 = atanf(y / x);
-    }
-
-    if (vector.x == 0)
-    {
-        angle2 = M_PI / 2 * vector.y / fabsf(vector.y);
-    }
-    else
-    {
-        angle2 = atanf(vector.y / vector.x);
-    }
-
-    return angle1 - angle2;
+    return atan2(crossProduct, dotProduct);
 }
 
 MyVector2 MyVector2::vectorRotation(float angle)

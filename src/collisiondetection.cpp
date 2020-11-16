@@ -143,6 +143,7 @@ bool	Collide::cConvexConvex(MyConvexPolygon p1, MyConvexPolygon p2)
     std::vector<MyRange> range;
     std::vector<MyVector2> normal;
 
+    //projection to first polygon----------------------------------------------------------------------------------------------
     for (int i = 0; i < p1.count; ++i)
     {
         MyVector2 temp = (p1.points[i].pointsVector(p1.points[(i + 1) % p1.count])).normalVector();
@@ -165,9 +166,43 @@ bool	Collide::cConvexConvex(MyConvexPolygon p1, MyConvexPolygon p2)
         range2.push_back(temp);
     }
 
+    //projection to second polygon----------------------------------------------------------------------------------------------
+    std::vector<MyRange> range3;
+    std::vector<MyVector2> normal2;
+
+    for (int i = 0; i < p2.count; ++i)
+    {
+        MyVector2 temp = (p2.points[i].pointsVector(p2.points[(i + 1) % p2.count])).normalVector();
+        normal2.push_back(temp);
+    }
+
+    for (int i = 0; i < p2.count; ++i)
+    {
+        MyRange temp;
+        temp = temp.rangeConvex(p1, normal2[i]);
+        range3.push_back(temp);
+    }
+
+    std::vector<MyRange> range4;
+
+    for (int i = 0; i < p2.count; ++i)
+    {
+        MyRange temp;
+        temp = temp.rangeConvex(p2, normal2[i]);
+        range4.push_back(temp);
+    }
+
+    //checking if ranges are colliding----------------------------------------------------------------------------------------------
     for (int i = 0; i < p1.count; ++i)
     {
         if (!range[i].rangeCollision(range2[i]))
+        {
+            return false;
+        }
+    }
+    for (int i = 0; i < p2.count; ++i)
+    {
+        if (!range3[i].rangeCollision(range4[i]))
         {
             return false;
         }
@@ -185,28 +220,28 @@ bool	Collide::cPlayerEnemy(Player& player, Enemy& enemy)
         for (auto& enemyPolygons : enemy.m_shape.polygons)
         {
             for (int i = 0; i < playerPolygons.count; ++i)
-                playerPolygons.points[i] = player.m_local.posGlobalLocal(playerPolygons.points[i]);
+                playerPolygons.points[i] = enemy.m_local.posGlobalLocal(playerPolygons.points[i]);
 
             for (int i = 0; i < enemyPolygons.count; ++i)
-                enemyPolygons.points[i] = player.m_local.posGlobalLocal(enemyPolygons.points[i]);
+                enemyPolygons.points[i] = enemy.m_local.posGlobalLocal(enemyPolygons.points[i]);
 
             if (Collide::cConvexConvex(playerPolygons, enemyPolygons))
             {
                 for (int i = 0; i < enemyPolygons.count; ++i)
-                    enemyPolygons.points[i] = player.m_local.posLocalGlobal(enemyPolygons.points[i]);
+                    enemyPolygons.points[i] = enemy.m_local.posLocalGlobal(enemyPolygons.points[i]);
 
                 for (int i = 0; i < playerPolygons.count; ++i)
-                    playerPolygons.points[i] = player.m_local.posLocalGlobal(playerPolygons.points[i]);
+                    playerPolygons.points[i] = enemy.m_local.posLocalGlobal(playerPolygons.points[i]);
 
                 return true;
             }
             else
             {
                 for (int i = 0; i < enemyPolygons.count; ++i)
-                    enemyPolygons.points[i] = player.m_local.posLocalGlobal(enemyPolygons.points[i]);
+                    enemyPolygons.points[i] = enemy.m_local.posLocalGlobal(enemyPolygons.points[i]);
 
                 for (int i = 0; i < playerPolygons.count; ++i)
-                    playerPolygons.points[i] = player.m_local.posLocalGlobal(playerPolygons.points[i]);
+                    playerPolygons.points[i] = enemy.m_local.posLocalGlobal(playerPolygons.points[i]);
             }
         }
     }

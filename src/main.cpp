@@ -30,7 +30,11 @@ int main(int argc, char* argv[])
 
     //TODO : move player and enemy to class World (std::vector)
     Player player(game);
-    FloatingMine enemy(game);
+    MagneticFireballMine enemy(game);
+    //FireballMine enemy2(game);
+    //MagneticMine enemy3(game);
+    //MagneticFireballMine enemy4(game);
+    //Minelayer enemy5(game);
 
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
@@ -72,7 +76,7 @@ int main(int argc, char* argv[])
 
         if (IsKeyDown(KEY_F))
         {
-            if (currentTime - previousTime >= 0.1f * deltaTime)
+            if (currentTime - previousTime >= 0.1f / deltaTime)
             {
                 previousTime = GetTime();
                 player.shoot(previousTime);
@@ -80,10 +84,14 @@ int main(int argc, char* argv[])
         }
 
         Collide::cBulletEnemy(player, enemy);
+        //Collide::cBulletEnemy(player, enemy2);
+        //Collide::cBulletEnemy(player, enemy3);
+        //Collide::cBulletEnemy(player, enemy4);
+        //Collide::cBulletEnemy(player, enemy5);
 
         for (auto& bullets : player.m_bullet)
         {
-            if (currentTime - bullets.m_lifeTime >= 1.f * deltaTime)
+            if (currentTime - bullets.m_lifeTime >= 1.f / deltaTime)
             {
                 player.m_bullet.erase(player.m_bullet.begin());
             }
@@ -103,6 +111,11 @@ int main(int argc, char* argv[])
             player.draw(GREEN);
             enemy.draw(GREEN);
         }
+
+        //enemy2.draw(BLUE);
+        //enemy3.draw(BLUE);
+        //enemy4.draw(BLUE);
+        //enemy5.draw(BLUE);
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 

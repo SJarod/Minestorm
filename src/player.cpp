@@ -92,8 +92,6 @@ void Player::move(World game, float deltaTime)
         teleport(game);
     }
 
-    m_speed = m_direction * m_kdrift;
-
     m_shape.polygons[0].center.x += m_thrust * m_speed.x * deltaTime;
     m_shape.polygons[0].center.y += m_thrust * m_speed.y * deltaTime;
 
@@ -167,13 +165,23 @@ void Player::update(float deltaTime)
         m_local.rotateReferential(rotation);
         m_local.origin = polygons.center;
 
-        //TODO: drift
-
-        DrawLine(polygons.center.x, polygons.center.y, (m_local.ui * 100 + polygons.center).x, (m_local.ui * 100 + polygons.center).y, RED);
-        DrawLine(polygons.center.x, polygons.center.y, (m_local.uj * 100 + polygons.center).x, (m_local.uj * 100 + polygons.center).y, BLUE);
-        DrawLine(polygons.center.x, polygons.center.y, (m_direction * 100 + polygons.center).x, (m_direction * 100 + polygons.center).y, YELLOW);
-        DrawLine(polygons.center.x, polygons.center.y, (m_speed * 100 + polygons.center).x, (m_speed * 100 + polygons.center).y, GREEN);
+        //DrawLine(polygons.center.x, polygons.center.y, (m_local.ui * 100 + polygons.center).x, (m_local.ui * 100 + polygons.center).y, RED);
+        //DrawLine(polygons.center.x, polygons.center.y, (m_local.uj * 100 + polygons.center).x, (m_local.uj * 100 + polygons.center).y, BLUE);
+        //DrawLine(polygons.center.x, polygons.center.y, (m_direction * 100 + polygons.center).x, (m_direction * 100 + polygons.center).y, YELLOW);
+        //DrawLine(polygons.center.x, polygons.center.y, (m_speed * 100 + polygons.center).x, (m_speed * 100 + polygons.center).y, GREEN);
 
         m_direction = m_direction.vectorRotation(rotation);
+
+        float angle = m_speed.vectorAngle(m_direction);
+
+        if (fabsf(angle) >= M_PI / 2)
+        {
+            m_speed = m_speed.vectorRotation(rotation);
+        }
+
+        if (angle != 0)
+        {
+            m_speed = m_speed.vectorRotation(2 * M_PI / 180 * angle / fabsf(angle));
+        }
     }
 }

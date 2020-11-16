@@ -108,16 +108,11 @@ MyRange MyRange::rangeCircle(MyCircle circle, MyVector2 dir)
 {
     MyRange newRange;
     MyVector2 A, B;     //2 points of circle
-    float angle;
 
     A.x = circle.center.x - circle.radius;
     A.y = circle.center.y;
     B.x = circle.center.x + circle.radius;
     B.y = circle.center.y;
-
-    angle = dir.vectorAngle(A.pointsVector(B));
-    A = A.pointRotation(circle.center, angle);
-    B = B.pointRotation(circle.center, angle);
 
     newRange.min = Math::min(A.dotProduct(dir), B.dotProduct(dir));
     newRange.max = Math::max(A.dotProduct(dir), B.dotProduct(dir));
