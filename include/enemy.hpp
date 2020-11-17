@@ -4,7 +4,8 @@
 
 #include "myvector2.hpp"
 #include "myconvexpolygon.hpp"
-#include "world.hpp"
+
+class World;
 
 class Enemy : public Entity
 {
@@ -15,12 +16,13 @@ protected:
 
 public:
 	Enemy();
-	Enemy(World game);
+	Enemy(World& game);
 	~Enemy();
 
 	void drawSpawnPoint();
+	void spawn();
 
-	void move(float deltaTime);
+	void move(World& game, float deltaTime, float gameSpeed);
 };
 
 class FloatingMine : public Enemy
@@ -29,7 +31,7 @@ private:
 
 public:
 	FloatingMine();
-	FloatingMine(World game);
+	FloatingMine(World& game);
 };
 
 class FireballMine : public Enemy
@@ -38,7 +40,7 @@ private:
 
 public:
 	FireballMine();
-	FireballMine(World game);
+	FireballMine(World& game);
 };
 
 class MagneticMine : public Enemy
@@ -47,7 +49,7 @@ private:
 
 public:
 	MagneticMine();
-	MagneticMine(World game);
+	MagneticMine(World& game);
 };
 
 class MagneticFireballMine : public Enemy
@@ -56,7 +58,7 @@ private:
 
 public:
 	MagneticFireballMine();
-	MagneticFireballMine(World game);
+	MagneticFireballMine(World& game);
 };
 
 class Fireball : public Enemy
@@ -65,7 +67,7 @@ private:
 
 public:
 	Fireball();
-	Fireball(World game);
+	Fireball(World& game);
 };
 
 class Minelayer : public Enemy
@@ -74,5 +76,5 @@ private:
 
 public:
 	Minelayer();
-	Minelayer(World game);
+	Minelayer(World& game);
 };

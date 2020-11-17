@@ -192,6 +192,9 @@ MyVector2 MyVector2::operator-(MyVector2 vect) const
 
 MyVector2& MyVector2::operator-=(MyVector2 vect)
 {
+    this->x -= vect.x;
+    this->y -= vect.y;
+
     return *this;
 }
 

@@ -14,7 +14,7 @@ Player::Player()
 
 }
 
-Player::Player(World game)
+Player::Player(World& game)
 {
     MyVector2* points = new MyVector2[4];
     points[0].x = 0;
@@ -50,19 +50,19 @@ Player::Player(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 3;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = {1.f, 0.f};
         m_local.uj = {0.f, -1.f};
     }
@@ -70,12 +70,12 @@ Player::Player(World game)
 
 Player::~Player()
 {
-    delete[] m_shape.points;
+    //delete[] m_shape.points;
 
-    for (auto& polygons : m_shape.polygons)
-    {
-        delete[] polygons.points;
-    }
+    //for (auto& polygons : m_shape.polygons)
+    //{
+    //    delete[] polygons.points;
+    //}
 }
 
 void Player::shoot(float currentTime)
@@ -85,15 +85,40 @@ void Player::shoot(float currentTime)
     m_bullet.push_back(bullet);
 }
 
-void Player::move(World game, float deltaTime)
+//TODO : look at Enemy::move()
+void Player::move(World& game, float deltaTime, float gameSpeed)
 {
     if (IsKeyPressed(KEY_E) || IsKeyPressed(KEY_T))
     {
         teleport(game);
     }
 
-    m_shape.polygons[0].center.x += m_thrust * m_speed.x * deltaTime;
-    m_shape.polygons[0].center.y += m_thrust * m_speed.y * deltaTime;
+
+
+    //for (auto& polygons : m_shape.polygons)
+    //{
+    //    polygons.center = m_local.posGlobalLocal(polygons.center);
+
+    //    for (int i = 0; i < polygons.count; ++i)
+    //    {
+    //        polygons.points[i] = m_local.posGlobalLocal(polygons.points[i]);
+    //        polygons.points[i] -= polygons.center;
+    //    }
+
+    //    polygons.center += m_speed * m_thrust * deltaTime * gameSpeed;
+
+    //    for (int i = 0; i < polygons.count; ++i)
+    //    {
+    //        polygons.points[i] += polygons.center;
+    //        polygons.points[i] = m_local.posLocalGlobal(polygons.points[i]);
+    //    }
+
+    //    polygons.center = m_local.posLocalGlobal(polygons.center);
+    //}
+
+
+
+    m_shape.polygons[0].center += m_speed * m_thrust * deltaTime * gameSpeed;
 
     m_shape.polygons[0].center = m_local.posGlobalLocal(m_shape.polygons[0].center);
 
@@ -118,8 +143,7 @@ void Player::move(World game, float deltaTime)
 
 
 
-    m_shape.polygons[1].center.x += m_thrust * m_speed.x * deltaTime;
-    m_shape.polygons[1].center.y += m_thrust * m_speed.y * deltaTime;
+    m_shape.polygons[1].center += m_speed * m_thrust * deltaTime * gameSpeed;
 
     m_shape.polygons[1].center = m_local.posGlobalLocal(m_shape.polygons[1].center);
 
@@ -143,21 +167,9 @@ void Player::move(World game, float deltaTime)
     m_shape.polygons[1].center = m_local.posLocalGlobal(m_shape.polygons[1].center);
 }
 
-void Player::teleport(World game)
+void Player::update(float deltaTime, float gameSpeed)
 {
-    MyVector2 newPos;
-    newPos.x = rand() % game.getScreenWidth();
-    newPos.y = rand() % game.getScreenHeight();
-
-    for (auto& polygons : m_shape.polygons)
-    {
-        polygons.center = newPos;
-    }
-}
-
-void Player::update(float deltaTime)
-{
-    float rotation = ((double)IsKeyDown(KEY_G) - (double)IsKeyDown(KEY_D)) * 4 * M_PI / 180 * deltaTime;
+    float rotation = ((double)IsKeyDown(KEY_G) - (double)IsKeyDown(KEY_D)) * 4 * M_PI / 180 * deltaTime * gameSpeed;
 
     for (auto& polygons : m_shape.polygons)
     {

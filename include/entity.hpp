@@ -6,6 +6,8 @@
 #include "myreferential2.hpp"
 #include "myconcavepolygon.hpp"
 
+class World;
+
 class Entity
 {
 private:
@@ -24,4 +26,6 @@ public:
 	//float				m_friction = 0.5f;
 
 	void draw(Color color) const;
+
+	void teleport(World& game);
 };

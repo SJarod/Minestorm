@@ -1,5 +1,7 @@
 #include "math.hpp"
 
+#include <cmath>
+
 float Math::min(float a, float b)
 {
 	if (a > b)
@@ -27,4 +29,9 @@ float Math::max(float a, float b)
 float Math::clamp(float val, float mini, float maxi)
 {
 	return max(mini, min(val, maxi));
+}
+
+float Math::random(int min, int max)
+{
+	return ((float(rand()) / float(RAND_MAX)) * (max - min)) + min;
 }

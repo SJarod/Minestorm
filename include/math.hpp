@@ -9,4 +9,7 @@ namespace Math
 	float max(float a, float b);
 
 	float clamp(float val, float mini, float maxi);
+
+	//returns randome float between min and max
+	float random(int min, int max);
 }

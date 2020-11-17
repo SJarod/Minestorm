@@ -2,11 +2,12 @@
 
 #include "raylib.h"
 
-#include "world.hpp"
 #include "entity.hpp"
 #include "bullet.hpp"
 
 #include "myconvexpolygon.hpp"
+
+class World;
 
 struct InputPlayerOne
 {
@@ -33,11 +34,10 @@ public:
 	std::vector<Bullet> m_bullet;
 
 	Player();
-	Player(World game);
+	Player(World& game);
 	~Player();
 	
 	void shoot(float currentTime);
-	void move(World game, float deltaTime);
-	void teleport(World game);
-	void update(float deltaTime);
+	void move(World& game, float deltaTime, float gameSpeed);
+	void update(float deltaTime, float gameSpeed);
 };

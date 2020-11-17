@@ -2,36 +2,61 @@
 
 #include "enemy.hpp"
 
+#include "world.hpp"
+
 Enemy::Enemy()
 {
 
 }
 
-Enemy::Enemy(World game)
+Enemy::Enemy(World& game)
 {
     
 }
 
 Enemy::~Enemy()
 {
-    delete[] m_shape.points;
+    //delete[] m_shape.points;
 
-    for (auto& polygons : m_shape.polygons)
-    {
-        delete[] polygons.points;
-    }
+    //for (auto& polygons : m_shape.polygons)
+    //{
+    //    delete[] polygons.points;
+    //}
 }
 
-void Enemy::move(float deltaTime)
+void Enemy::drawSpawnPoint()
 {
 
+}
+
+void Enemy::spawn()
+{
+
+}
+
+void Enemy::move(World& game, float deltaTime, float gameSpeed)
+{
+    for (auto& polygons : m_shape.polygons)
+    {
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] -= polygons.center;
+        }
+
+        polygons.center += m_speed * 1 * deltaTime * gameSpeed;
+
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] += polygons.center;
+        }
+    }
 }
 
 FloatingMine::FloatingMine()
 {
 }
 
-FloatingMine::FloatingMine(World game)
+FloatingMine::FloatingMine(World& game)
 {
     MyVector2* points = new MyVector2[7];
     points[0].x = 0;
@@ -46,6 +71,7 @@ FloatingMine::FloatingMine(World game)
     points[6] = points[4].vectorRotation(2 * M_PI / 3);
 
     m_direction = { 0.f, -1.f };
+    m_speed = {  Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -74,20 +100,20 @@ FloatingMine::FloatingMine(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
-        polygons.points[3] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
+        polygons.points[3] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 4;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
@@ -98,7 +124,7 @@ FireballMine::FireballMine()
 
 }
 
-FireballMine::FireballMine(World game)
+FireballMine::FireballMine(World& game)
 {
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
@@ -115,6 +141,7 @@ FireballMine::FireballMine(World game)
     points[8] = points[6].vectorRotation(M_PI / 2);
 
     m_direction = { 0.f, -1.f };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -150,20 +177,20 @@ FireballMine::FireballMine(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
-        polygons.points[3] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
+        polygons.points[3] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 4;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
@@ -174,7 +201,7 @@ MagneticMine::MagneticMine()
 
 }
 
-MagneticMine::MagneticMine(World game)
+MagneticMine::MagneticMine(World& game)
 {
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
@@ -191,6 +218,7 @@ MagneticMine::MagneticMine(World game)
     points[8] = points[6].vectorRotation(M_PI / 2);
 
     m_direction = { 0.f, -1.f };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -226,20 +254,20 @@ MagneticMine::MagneticMine(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
-        polygons.points[3] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
+        polygons.points[3] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 4;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
@@ -250,7 +278,7 @@ MagneticFireballMine::MagneticFireballMine()
 
 }
 
-MagneticFireballMine::MagneticFireballMine(World game)
+MagneticFireballMine::MagneticFireballMine(World& game)
 {
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
@@ -267,6 +295,7 @@ MagneticFireballMine::MagneticFireballMine(World game)
     points[8] = points[6].vectorRotation(M_PI / 2);
 
     m_direction = { 0.f, -1.f };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -298,19 +327,19 @@ MagneticFireballMine::MagneticFireballMine(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 3;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
@@ -321,7 +350,7 @@ Fireball::Fireball()
 
 }
 
-Fireball::Fireball(World game)
+Fireball::Fireball(World& game)
 {
     MyVector2* points = new MyVector2[3];
     points[0].x = 0 - 10;
@@ -346,6 +375,7 @@ Fireball::Fireball(World game)
     points3[2].y = 0 - 5;
 
     m_direction = { 0.f, -1.f };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape = points;
@@ -366,19 +396,19 @@ Fireball::Fireball(World game)
 
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.center;
-        polygons.points[1] += game.center;
-        polygons.points[2] += game.center;
+        polygons.points[0] += game.m_center;
+        polygons.points[1] += game.m_center;
+        polygons.points[2] += game.m_center;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 3;
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
@@ -389,31 +419,32 @@ Minelayer::Minelayer()
 
 }
 
-Minelayer::Minelayer(World game)
+Minelayer::Minelayer(World& game)
 {
     MyVector2* points = new MyVector2[10];
-    points[0].x = game.center.x;
-    points[0].y = game.center.y;
-    points[1].x = game.center.x - 100;
-    points[1].y = game.center.y - 10;
-    points[2].x = game.center.x - 10;
-    points[2].y = game.center.y - 10;
-    points[3].x = game.center.x;
-    points[3].y = game.center.y - 30;
-    points[4].x = game.center.x + 10;
-    points[4].y = game.center.y - 10;
-    points[5].x = game.center.x + 100;
-    points[5].y = game.center.y - 10;
-    points[6].x = game.center.x + 110;
-    points[6].y = game.center.y + 25;
-    points[7].x = game.center.x + 90;
-    points[7].y = game.center.y + 10;
-    points[8].x = game.center.x - 90;
-    points[8].y = game.center.y + 10;
-    points[9].x = game.center.x - 110;
-    points[9].y = game.center.y + 25;
+    points[0].x = game.m_center.x;
+    points[0].y = game.m_center.y;
+    points[1].x = game.m_center.x - 100;
+    points[1].y = game.m_center.y - 10;
+    points[2].x = game.m_center.x - 10;
+    points[2].y = game.m_center.y - 10;
+    points[3].x = game.m_center.x;
+    points[3].y = game.m_center.y - 30;
+    points[4].x = game.m_center.x + 10;
+    points[4].y = game.m_center.y - 10;
+    points[5].x = game.m_center.x + 100;
+    points[5].y = game.m_center.y - 10;
+    points[6].x = game.m_center.x + 110;
+    points[6].y = game.m_center.y + 25;
+    points[7].x = game.m_center.x + 90;
+    points[7].y = game.m_center.y + 10;
+    points[8].x = game.m_center.x - 90;
+    points[8].y = game.m_center.y + 10;
+    points[9].x = game.m_center.x - 110;
+    points[9].y = game.m_center.y + 25;
 
     m_direction = { 0.f, -1.f };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -452,10 +483,10 @@ Minelayer::Minelayer(World game)
     for (auto& polygons : m_shape.polygons)
     {
         polygons.angle = 0;
-        polygons.center = game.center;
+        polygons.center = game.m_center;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.center;
+        m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }

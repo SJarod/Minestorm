@@ -17,7 +17,7 @@ public:
 	Bullet();
 	Bullet(MyVector2 c, MyVector2 dir, float lifeTime);
 
-	void move(float deltaTime);
+	void move(float deltaTime, float gameSpeed);
 
 	void draw(Color color) const;
 };

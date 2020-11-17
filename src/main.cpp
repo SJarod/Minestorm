@@ -28,13 +28,7 @@ int main(int argc, char* argv[])
 
     //TODO : menu
 
-    //TODO : move player and enemy to class World (std::vector)
-    Player player(game);
-    MagneticFireballMine enemy(game);
-    //FireballMine enemy2(game);
-    //MagneticMine enemy3(game);
-    //MagneticFireballMine enemy4(game);
-    //Minelayer enemy5(game);
+    game.m_players.push_back(Player(game));
 
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
@@ -61,61 +55,112 @@ int main(int argc, char* argv[])
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
-        //TODO : move moving variable in player.cpp,Player::move();
-        moving = IsKeyDown(KEY_R) * 2 - 1;  //true : moving = 1, false : moving = -1
-        player.m_thrust += moving / 10.f * deltaTime;
-        player.m_thrust = Math::clamp(player.m_thrust, 0, 7);
-
-        for (auto& polygons : player.m_shape.polygons)
-            polygons.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4 * deltaTime;
-
-        game.playerOnEdge(player);
-
-        player.update(deltaTime);
-        player.move(game, deltaTime);
-
-        if (IsKeyDown(KEY_F))
+        for (auto& players : game.m_players)
         {
-            if (currentTime - previousTime >= 0.1f / deltaTime)
-            {
-                previousTime = GetTime();
-                player.shoot(previousTime);
-            }
-        }
+            //TODO : move moving variable in player.cpp,Player::move();
+            moving = IsKeyDown(KEY_R) * 2 - 1;  //true : moving = 1, false : moving = -1
+            players.m_thrust += moving / 10.f * deltaTime * game.m_gameSpeed;
+            players.m_thrust = Math::clamp(players.m_thrust, 0, 7);
 
-        Collide::cBulletEnemy(player, enemy);
-        //Collide::cBulletEnemy(player, enemy2);
-        //Collide::cBulletEnemy(player, enemy3);
-        //Collide::cBulletEnemy(player, enemy4);
-        //Collide::cBulletEnemy(player, enemy5);
+            for (auto& polygons : players.m_shape.polygons)
+                polygons.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4 * deltaTime * game.m_gameSpeed;
 
-        for (auto& bullets : player.m_bullet)
-        {
-            if (currentTime - bullets.m_lifeTime >= 1.f / deltaTime)
+            game.playerOnEdge(players);
+
+            for (auto& enemies : game.m_enemies)
             {
-                player.m_bullet.erase(player.m_bullet.begin());
+                game.enemyOnEdge(enemies);
             }
 
-            bullets.move(deltaTime);
-            game.bulletOnEdge(bullets);
-            bullets.draw(YELLOW);
+            players.update(deltaTime, game.m_gameSpeed);
+            players.move(game, deltaTime, game.m_gameSpeed);
+
+            for (auto& enemies : game.m_enemies)
+            {
+                enemies.move(game, deltaTime, game.m_gameSpeed);
+            }
+
+            if (IsKeyDown(KEY_F))
+            {
+                if (currentTime - previousTime >= 0.1f / deltaTime)
+                {
+                    previousTime = GetTime();
+                    players.shoot(previousTime);
+                }
+            }
+
+            int index = 0;
+            for (auto& enemies : game.m_enemies)
+            {
+                if (Collide::cBulletEnemy(players, enemies))
+                {
+                    game.m_enemies.erase(game.m_enemies.begin() + index);
+                }
+                ++index;
+            }
+
+            for (auto& bullets : players.m_bullet)
+            {
+                if (currentTime - bullets.m_lifeTime >= 1.f / deltaTime)
+                {
+                    players.m_bullet.erase(players.m_bullet.begin());
+                }
+
+                bullets.move(deltaTime, game.m_gameSpeed);
+                game.bulletOnEdge(bullets);
+                bullets.draw(YELLOW);
+            }
+
+            index = 0;
+            for (auto& enemies : game.m_enemies)
+            {
+                if (Collide::cPlayerEnemy(players, enemies))
+                {
+                    enemies.draw(RED);
+                    game.m_enemies.erase(game.m_enemies.begin() + index);
+                    //TODO : delete player
+                    game.m_players.pop_back();
+                }
+                else
+                {
+                    enemies.draw(GREEN);
+                }
+                ++index;
+            }
+
+            players.draw(WHITE);
         }
 
-        if (Collide::cPlayerEnemy(player, enemy))
+        if (IsKeyPressed(KEY_KP_1))
         {
-            player.draw(RED);
-            enemy.draw(RED);
+            game.m_enemies.push_back(FloatingMine(game));
+            (game.m_enemies.end() - 1)->teleport(game);
         }
-        else
+        else if (IsKeyPressed(KEY_KP_2))
         {
-            player.draw(GREEN);
-            enemy.draw(GREEN);
+            game.m_enemies.push_back(FireballMine(game));
+            (game.m_enemies.end() - 1)->teleport(game);
         }
-
-        //enemy2.draw(BLUE);
-        //enemy3.draw(BLUE);
-        //enemy4.draw(BLUE);
-        //enemy5.draw(BLUE);
+        else if (IsKeyPressed(KEY_KP_3))
+        {
+            game.m_enemies.push_back(MagneticMine(game));
+            (game.m_enemies.end() - 1)->teleport(game);
+        }
+        else if (IsKeyPressed(KEY_KP_4))
+        {
+            game.m_enemies.push_back(MagneticFireballMine(game));
+            (game.m_enemies.end() - 1)->teleport(game);
+        }
+        else if (IsKeyPressed(KEY_KP_5))
+        {
+            game.m_enemies.push_back(Minelayer(game));
+            (game.m_enemies.end() - 1)->teleport(game);
+        }
+        else if (IsKeyPressed(KEY_ENTER))
+        {
+            game.m_players.push_back(Player(game));
+            (game.m_players.end() - 1)->teleport(game);
+        }
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 
