@@ -4,25 +4,35 @@
 
 #include "myvector2.hpp"
 #include "myconvexpolygon.hpp"
+#include "mycircle.hpp"
 
 class World;
+class Fireball;
+
+enum EnemySize
+{
+	SMALL,
+	MEDIUM,
+	BIG,
+};
 
 class Enemy : public Entity
 {
 private:
 
 protected:
-	MyVector2	m_spawnPoint;
+	EnemySize m_size;
 
 public:
+
 	Enemy();
 	Enemy(World& game);
 	virtual ~Enemy();
 
-	void drawSpawnPoint();
-	void spawn();
+	virtual void	move(World& game, float deltaTime);
+	virtual bool	shoot();
 
-	virtual void move(World& game, float deltaTime);
+	void			divide(World& game);
 };
 
 class FloatingMine : public Enemy
@@ -31,7 +41,7 @@ private:
 
 public:
 	FloatingMine();
-	FloatingMine(World& game);
+	FloatingMine(World& game, EnemySize size);
 };
 
 class FireballMine : public Enemy
@@ -40,7 +50,9 @@ private:
 
 public:
 	FireballMine();
-	FireballMine(World& game);
+	FireballMine(World& game, EnemySize size);
+
+	bool shoot();
 };
 
 class MagneticMine : public Enemy
@@ -49,7 +61,7 @@ private:
 
 public:
 	MagneticMine();
-	MagneticMine(World& game);
+	MagneticMine(World& game, EnemySize size);
 
 	void move(World& game, float deltaTime) override;
 };
@@ -60,18 +72,29 @@ private:
 
 public:
 	MagneticFireballMine();
-	MagneticFireballMine(World& game);
+	MagneticFireballMine(World& game, EnemySize size);
 
 	void move(World& game, float deltaTime) override;
+
+	bool shoot();
 };
 
-class Fireball : public Enemy
+class Fireball
 {
 private:
 
 public:
+	MyCircle	m_shape;
+	float		m_lifeTime;
+
+	MyVector2	m_direction;
+
 	Fireball();
-	Fireball(World& game);
+	Fireball(MyVector2 c, MyVector2 dir, float lifeTime);
+
+	void move(float deltaTime, float gameSpeed);
+
+	void draw(Color color) const;
 };
 
 class Minelayer : public Enemy

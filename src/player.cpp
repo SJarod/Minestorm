@@ -90,6 +90,12 @@ int Player::getHealth() const
     return m_health;
 }
 
+void Player::addHealth()
+{
+    if (m_health < 3)
+        ++m_health;
+}
+
 void Player::setSecondPlayer()
 {
     m_id = 2;

@@ -14,13 +14,13 @@ enum GameMode
 	MENU,
 	ONE,
 	TWO,
-	OVER
+	OVER,
 };
 
 class World
 {
 private:
-	int m_level = 1;
+	int m_level;
 	int m_score;
 	int screenWidth, screenHeight;
 
@@ -29,9 +29,17 @@ public:
 	float		m_gameSpeed;
 	GameMode	m_menu = MENU;
 
+	int			m_spawnNum;
+	float		m_spawnTime = 0.f;
+	int			m_enemyNum = 2;
+
 	int						m_playerCount = 1;
 	std::vector<Player*>	m_players;
+
 	std::vector<Enemy*>		m_enemies;
+	std::vector<Fireball>   m_fireballs;
+
+	MyVector2*				m_spawnPoint;
 
 	World();
 	World(int screenWidth, int screenHeight);
@@ -40,14 +48,31 @@ public:
 	int getScreenWidth(int dif);
 	int getScreenHeight(int dif);
 
+
 	void displayMenu();
 	void displayHUD();
+	void displayPause();
 	void displayGameOver();
 
-	void gameLoopSingleplayer(float deltaTime, float currentTime);
-	void gameLoopMultiplayer(float deltaTime, float currentTime);
+
+	void setGame();
+	void endGame();
+
+	void nextLevel();
+
+	void playerLoop(float deltaTime, float currentTime);
+	void playerDraw();
+
+	void drawSpawnPoint();
+	void spawn(EnemySize size);
 
 	void playerOnEdge();
 	void bulletOnEdge();
+	void fireballOnEdge();
 	void enemyOnEdge();
+	void entitiesOnEdge();
+
+
+	void gameLoopSingleplayer(float deltaTime, float currentTime);
+	void gameLoopMultiplayer(float deltaTime, float currentTime);
 };

@@ -24,16 +24,6 @@ Enemy::~Enemy()
     }
 }
 
-void Enemy::drawSpawnPoint()
-{
-
-}
-
-void Enemy::spawn()
-{
-
-}
-
 void Enemy::move(World& game, float deltaTime)
 {
     for (auto& polygons : m_shape.polygons)
@@ -52,27 +42,58 @@ void Enemy::move(World& game, float deltaTime)
     }
 }
 
+bool Enemy::shoot()
+{
+    return false;
+}
+
+void Enemy::divide(World& game)
+{
+    if (game.m_spawnNum <= 0)
+        return;
+
+    if (m_size == BIG)
+    {
+        game.spawn(MEDIUM);
+        game.spawn(MEDIUM);
+    }
+    else if (m_size == MEDIUM)
+    {
+        game.spawn(SMALL);
+        game.spawn(SMALL);
+    }
+    else
+        return;
+}
+
 FloatingMine::FloatingMine()
 {
 
 }
 
-FloatingMine::FloatingMine(World& game)
+FloatingMine::FloatingMine(World& game, EnemySize size)
 {
+    m_size = size;
+
+    float finalSize = size;
+    if (finalSize == 0)
+        finalSize = 0.5;
+
     MyVector2* points = new MyVector2[7];
     points[0].x = 0;
     points[0].y = 0;
-    points[1].x = 0 - 10;
-    points[1].y = 0 - 5;
+    points[1].x = 0 - 10 * finalSize;
+    points[1].y = 0 - 5 * finalSize;
     points[2].x = 0;
-    points[2].y = 0 - 35;
+    points[2].y = 0 - 35 * finalSize;
     points[3] = points[1].vectorRotation(2 * M_PI / 3);
     points[4] = points[2].vectorRotation(2 * M_PI / 3);
     points[5] = points[3].vectorRotation(2 * M_PI / 3);
     points[6] = points[4].vectorRotation(2 * M_PI / 3);
 
     m_direction = { 0.f, -1.f };
-    m_speed = {  Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -125,15 +146,21 @@ FireballMine::FireballMine()
 
 }
 
-FireballMine::FireballMine(World& game)
+FireballMine::FireballMine(World& game, EnemySize size)
 {
+    m_size = size;
+
+    float finalSize = size;
+    if (finalSize == 0)
+        finalSize = 0.5;
+
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
     points[0].y = 0;
-    points[1].x = 0 - 10;
-    points[1].y = 0 - 15;
+    points[1].x = 0 - 10 * finalSize;
+    points[1].y = 0 - 15 * finalSize;
     points[2].x = 0;
-    points[2].y = 0 - 35;
+    points[2].y = 0 - 35 * finalSize;
     points[3] = points[1].vectorRotation(M_PI / 2);
     points[4] = points[2].vectorRotation(M_PI / 2);
     points[5] = points[3].vectorRotation(M_PI / 2);
@@ -143,6 +170,7 @@ FireballMine::FireballMine(World& game)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -197,20 +225,31 @@ FireballMine::FireballMine(World& game)
     }
 }
 
+bool FireballMine::shoot()
+{
+    return true;
+}
+
 MagneticMine::MagneticMine()
 {
 
 }
 
-MagneticMine::MagneticMine(World& game)
+MagneticMine::MagneticMine(World& game, EnemySize size)
 {
+    m_size = size;
+
+    float finalSize = size;
+    if (finalSize == 0)
+        finalSize = 0.5;
+
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
     points[0].y = 0;
-    points[1].x = 0 - 10;
-    points[1].y = 0 - 5;
+    points[1].x = 0 - 10 * finalSize;
+    points[1].y = 0 - 5 * finalSize;
     points[2].x = 0;
-    points[2].y = 0 - 35;
+    points[2].y = 0 - 35 * finalSize;
     points[3] = points[1].vectorRotation(M_PI / 2);
     points[4] = points[2].vectorRotation(M_PI / 2);
     points[5] = points[3].vectorRotation(M_PI / 2);
@@ -220,6 +259,7 @@ MagneticMine::MagneticMine(World& game)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -299,15 +339,21 @@ MagneticFireballMine::MagneticFireballMine()
 
 }
 
-MagneticFireballMine::MagneticFireballMine(World& game)
+MagneticFireballMine::MagneticFireballMine(World& game, EnemySize size)
 {
+    m_size = size;
+
+    float finalSize = size;
+    if (finalSize == 0)
+        finalSize = 0.5;
+
     MyVector2* points = new MyVector2[9];
     points[0].x = 0;
     points[0].y = 0;
-    points[1].x = 0 - 20;
-    points[1].y = 0 + 10;
-    points[2].x = 0 - 20;
-    points[2].y = 0 - 35;
+    points[1].x = 0 - 20 * finalSize;
+    points[1].y = 0 + 10 * finalSize;
+    points[2].x = 0 - 20 * finalSize;
+    points[2].y = 0 - 35 * finalSize;
     points[3] = points[1].vectorRotation(M_PI / 2);
     points[4] = points[2].vectorRotation(M_PI / 2);
     points[5] = points[3].vectorRotation(M_PI / 2);
@@ -317,6 +363,7 @@ MagneticFireballMine::MagneticFireballMine(World& game)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -386,73 +433,34 @@ void MagneticFireballMine::move(World& game, float deltaTime)
     }
 }
 
+bool MagneticFireballMine::shoot()
+{
+    return true;
+}
+
 Fireball::Fireball()
 {
 
 }
 
-Fireball::Fireball(World& game)
+Fireball::Fireball(MyVector2 c, MyVector2 dir, float lifeTime)
 {
-    MyVector2* points = new MyVector2[3];
-    points[0].x = 0 - 10;
-    points[0].y = 0 - 5;
-    points[1].x = 0;
-    points[1].y = 0 - 35;
-    points[2].x = 0 + 10;
-    points[2].y = 0 - 5;
-    MyVector2* points2 = new MyVector2[3];
-    points2[0].x = 0 - 10;
-    points2[0].y = 0 - 5;
-    points2[1].x = 0;
-    points2[1].y = 0 - 35;
-    points2[2].x = 0 + 10;
-    points2[2].y = 0 - 5;
-    MyVector2* points3 = new MyVector2[3];
-    points3[0].x = 0 - 10;
-    points3[0].y = 0 - 5;
-    points3[1].x = 0;
-    points3[1].y = 0 - 35;
-    points3[2].x = 0 + 10;
-    points3[2].y = 0 - 5;
+    m_shape.center = c;
+    m_shape.radius = 5.f;
 
-    m_direction = { 0.f, -1.f };
-    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_thrust = 0.f;
+    m_lifeTime = lifeTime;
 
-    m_shape = points;
-    for (auto& polygons : m_shape.polygons)
-    {
-        polygons.points[0] = polygons.points[0].vectorRotation(2 * M_PI / 3);
-        polygons.points[1] = polygons.points[1].vectorRotation(2 * M_PI / 3);
-        polygons.points[2] = polygons.points[2].vectorRotation(2 * M_PI / 3);
-    }
-    m_shape = points2;
-    for (auto& polygons : m_shape.polygons)
-    {
-        polygons.points[0] = polygons.points[0].vectorRotation(2 * M_PI / 3);
-        polygons.points[1] = polygons.points[1].vectorRotation(2 * M_PI / 3);
-        polygons.points[2] = polygons.points[2].vectorRotation(2 * M_PI / 3);
-    }
-    m_shape = points3;
+    m_direction = dir;
+}
 
-    for (auto& polygons : m_shape.polygons)
-    {
-        polygons.points[0] += game.m_center;
-        polygons.points[1] += game.m_center;
-        polygons.points[2] += game.m_center;
-    }
+void Fireball::move(float deltaTime, float gameSpeed)
+{
+    m_shape.center += m_direction * 10 * deltaTime * gameSpeed;
+}
 
-    for (auto& polygons : m_shape.polygons)
-    {
-        polygons.count = 3;
-        polygons.angle = 0;
-        polygons.center = game.m_center;
-
-        m_local.angle = polygons.angle;
-        m_local.origin = game.m_center;
-        m_local.ui = { 1.f, 0.f };
-        m_local.uj = { 0.f, -1.f };
-    }
+void Fireball::draw(Color color) const
+{
+    DrawCircle(m_shape.center.x, m_shape.center.y, m_shape.radius, color);
 }
 
 Minelayer::Minelayer()
@@ -486,6 +494,7 @@ Minelayer::Minelayer(World& game)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
+    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;

@@ -39,6 +39,7 @@ public:
 
 	int getId() const;
 	int getHealth() const;
+	void addHealth();
 	
 	void setSecondPlayer();
 	void setInputs();

@@ -34,4 +34,5 @@ namespace Collide
 	bool	cPlayerEnemy(Player& player, Enemy& enemy);
 	bool	cPlayerPlayer(Player& player, Player& player2);
 	bool	cBulletEnemy(Player& player, Enemy& enemy);
+	bool	cFireballPlayer(Fireball& fireball, Player& player);
 }

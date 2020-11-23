@@ -322,3 +322,37 @@ bool	Collide::cBulletEnemy(Player& player, Enemy& enemy)
 
     return false;
 }
+
+bool	Collide::cFireballPlayer(Fireball& fireball, Player& player)
+{
+    for (auto& playerPolygons : player.m_shape.polygons)
+    {
+        int index = 0;
+
+        fireball.m_shape.center = player.m_local.posGlobalLocal(fireball.m_shape.center);
+
+        for (int i = 0; i < playerPolygons.count; ++i)
+            playerPolygons.points[i] = player.m_local.posGlobalLocal(playerPolygons.points[i]);
+
+        if (Collide::cConvexCircle(playerPolygons, fireball.m_shape))
+        {
+            for (int i = 0; i < playerPolygons.count; ++i)
+                playerPolygons.points[i] = player.m_local.posLocalGlobal(playerPolygons.points[i]);
+
+            fireball.m_shape.center = player.m_local.posLocalGlobal(fireball.m_shape.center);
+
+            return true;
+        }
+        else
+        {
+            for (int i = 0; i < playerPolygons.count; ++i)
+                playerPolygons.points[i] = player.m_local.posLocalGlobal(playerPolygons.points[i]);
+
+            fireball.m_shape.center = player.m_local.posLocalGlobal(fireball.m_shape.center);
+        }
+
+        ++index;
+    }
+
+    return false;
+}

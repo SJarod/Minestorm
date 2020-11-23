@@ -50,6 +50,7 @@ int main(int argc, char* argv[])
             {
                 game.m_playerCount = 1;
                 game.m_players.push_back(new Player(game.m_center));
+                game.setGame();
                 game.m_menu = ONE;
             }
             else if (IsKeyPressed(KEY_K))
@@ -58,6 +59,7 @@ int main(int argc, char* argv[])
                 game.m_players.push_back(new Player({ game.m_center.x - 100, game.m_center.y }));
                 game.m_players.push_back(new Player({ game.m_center.x + 100, game.m_center.y }));
                 (*(game.m_players.end() - 1))->setSecondPlayer();
+                game.setGame();
                 game.m_menu = TWO;
             }
         }
@@ -70,19 +72,23 @@ int main(int argc, char* argv[])
 
         //TODO : move all to a function gameLoop();
 
-        //TODO : spawning enemies
-        //TODO : advanced enemy types
         //TODO : free memory leaks
             //https://www.fluentcpp.com/2018/09/18/how-to-remove-pointers-from-a-vector-in-cpp/
             //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch06s05.html
 
-        //TODO : destroy all enemies when game over
+        //TODO : minelayer
+        //TODO : score depending on enemy type
+        //TODO : multiplayer : respawn player if dead at end of wave
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
         if (game.m_menu == MENU)
         {
             game.displayMenu();
+        }
+        else if (game.m_gameSpeed == 0.f)
+        {
+            game.displayPause();
         }
         else if (game.m_menu == ONE)
         {
@@ -97,9 +103,8 @@ int main(int argc, char* argv[])
         else if (game.m_menu == OVER)
         {
             game.displayGameOver();
+            game.endGame();
         }
-
-        printf("X : %d, Y : %d\r", GetMouseX(), GetMouseY());
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 
