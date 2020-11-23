@@ -26,6 +26,8 @@ public:
 	//float				m_friction = 0.5f;
 
 	void draw(Color color) const;
+	void draw(MyVector2 pos, Color color) const;
 
+	void teleport(MyVector2 pos);
 	void teleport(World& game);
 };

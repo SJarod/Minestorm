@@ -32,5 +32,6 @@ namespace Collide
 	bool	cConvexConvex(MyConvexPolygon p1, MyConvexPolygon p2);
 
 	bool	cPlayerEnemy(Player& player, Enemy& enemy);
+	bool	cPlayerPlayer(Player& player, Player& player2);
 	bool	cBulletEnemy(Player& player, Enemy& enemy);
 }

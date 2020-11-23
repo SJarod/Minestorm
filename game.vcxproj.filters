@@ -31,6 +31,7 @@
     <ClInclude Include="include\mycircle.hpp" />
     <ClInclude Include="include\collisiondetection.hpp" />
     <ClInclude Include="include\myrange.hpp" />
+    <ClInclude Include="include\aabb.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\world.hpp" />

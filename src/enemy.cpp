@@ -16,12 +16,12 @@ Enemy::Enemy(World& game)
 
 Enemy::~Enemy()
 {
-    //delete[] m_shape.points;
+    delete[] m_shape.points;
 
-    //for (auto& polygons : m_shape.polygons)
-    //{
-    //    delete[] polygons.points;
-    //}
+    for (auto& polygons : m_shape.polygons)
+    {
+        delete[] polygons.points;
+    }
 }
 
 void Enemy::drawSpawnPoint()
@@ -34,7 +34,7 @@ void Enemy::spawn()
 
 }
 
-void Enemy::move(World& game, float deltaTime, float gameSpeed)
+void Enemy::move(World& game, float deltaTime)
 {
     for (auto& polygons : m_shape.polygons)
     {
@@ -43,7 +43,7 @@ void Enemy::move(World& game, float deltaTime, float gameSpeed)
             polygons.points[i] -= polygons.center;
         }
 
-        polygons.center += m_speed * 1 * deltaTime * gameSpeed;
+        polygons.center += m_speed * 1 * deltaTime * game.m_gameSpeed;
 
         for (int i = 0; i < polygons.count; ++i)
         {
@@ -54,6 +54,7 @@ void Enemy::move(World& game, float deltaTime, float gameSpeed)
 
 FloatingMine::FloatingMine()
 {
+
 }
 
 FloatingMine::FloatingMine(World& game)
@@ -130,7 +131,7 @@ FireballMine::FireballMine(World& game)
     points[0].x = 0;
     points[0].y = 0;
     points[1].x = 0 - 10;
-    points[1].y = 0 - 5;
+    points[1].y = 0 - 15;
     points[2].x = 0;
     points[2].y = 0 - 35;
     points[3] = points[1].vectorRotation(M_PI / 2);
@@ -273,6 +274,26 @@ MagneticMine::MagneticMine(World& game)
     }
 }
 
+void MagneticMine::move(World& game, float deltaTime)
+{
+    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[0]->m_shape.polygons[0].center).normalizeVect();
+
+    for (auto& polygons : m_shape.polygons)
+    {
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] -= polygons.center;
+        }
+
+        polygons.center -= m_speed * 1 * deltaTime * game.m_gameSpeed;
+
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] += polygons.center;
+        }
+    }
+}
+
 MagneticFireballMine::MagneticFireballMine()
 {
 
@@ -342,6 +363,26 @@ MagneticFireballMine::MagneticFireballMine(World& game)
         m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
+    }
+}
+
+void MagneticFireballMine::move(World& game, float deltaTime)
+{
+    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[0]->m_shape.polygons[0].center).normalizeVect();
+
+    for (auto& polygons : m_shape.polygons)
+    {
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] -= polygons.center;
+        }
+
+        polygons.center -= m_speed * 1 * deltaTime * game.m_gameSpeed;
+
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] += polygons.center;
+        }
     }
 }
 

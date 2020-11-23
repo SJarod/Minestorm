@@ -31,6 +31,11 @@ float Math::clamp(float val, float mini, float maxi)
 	return max(mini, min(val, maxi));
 }
 
+float Math::toRadians(float angle)
+{
+	return angle * M_PI / 180;
+}
+
 float Math::random(int min, int max)
 {
 	return ((float(rand()) / float(RAND_MAX)) * (max - min)) + min;

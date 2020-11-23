@@ -14,7 +14,7 @@ Player::Player()
 
 }
 
-Player::Player(World& game)
+Player::Player(MyVector2 pos)
 {
     MyVector2* points = new MyVector2[4];
     points[0].x = 0;
@@ -48,21 +48,23 @@ Player::Player(World& game)
     m_direction = { 0.f, -1.f };
     m_thrust = 0.f;
 
+    m_pos = pos;
+
     for (auto& polygons : m_shape.polygons)
     {
-        polygons.points[0] += game.m_center;
-        polygons.points[1] += game.m_center;
-        polygons.points[2] += game.m_center;
+        polygons.points[0] += pos;
+        polygons.points[1] += pos;
+        polygons.points[2] += pos;
     }
 
     for (auto& polygons : m_shape.polygons)
     {
         polygons.count = 3;
         polygons.angle = 0;
-        polygons.center = game.m_center;
+        polygons.center = pos;
 
         m_local.angle = polygons.angle;
-        m_local.origin = game.m_center;
+        m_local.origin = pos;
         m_local.ui = {1.f, 0.f};
         m_local.uj = {0.f, -1.f};
     }
@@ -70,12 +72,48 @@ Player::Player(World& game)
 
 Player::~Player()
 {
-    //delete[] m_shape.points;
+    delete[] m_shape.points;
 
-    //for (auto& polygons : m_shape.polygons)
-    //{
-    //    delete[] polygons.points;
-    //}
+    for (auto& polygons : m_shape.polygons)
+    {
+        delete[] polygons.points;
+    }
+}
+
+int Player::getId() const
+{
+    return m_id;
+}
+
+int Player::getHealth() const
+{
+    return m_health;
+}
+
+void Player::setSecondPlayer()
+{
+    m_id = 2;
+    m_color = { 255, 128, 128, 255 };
+}
+
+void Player::setInputs()
+{
+    if (m_id == 1)
+    {
+        m_inputs.movingForward = IsKeyDown(KEY_R);
+        m_inputs.rotateRight =   IsKeyDown(KEY_G);
+        m_inputs.rotateLeft =    IsKeyDown(KEY_D);
+        m_inputs.shooting =      IsKeyDown(KEY_F);
+        m_inputs.teleporting =   IsKeyPressed(KEY_E) + IsKeyPressed(KEY_T);
+    }
+    else if (m_id == 2)
+    {
+        m_inputs.movingForward = IsKeyDown(KEY_I);
+        m_inputs.rotateRight =   IsKeyDown(KEY_L);
+        m_inputs.rotateLeft =    IsKeyDown(KEY_J);
+        m_inputs.shooting =      IsKeyDown(KEY_K);
+        m_inputs.teleporting =   IsKeyPressed(KEY_U) + IsKeyPressed(KEY_O);
+    }
 }
 
 void Player::shoot(float currentTime)
@@ -85,10 +123,23 @@ void Player::shoot(float currentTime)
     m_bullet.push_back(bullet);
 }
 
-//TODO : look at Enemy::move()
-void Player::move(World& game, float deltaTime, float gameSpeed)
+bool Player::isHit()
 {
-    if (IsKeyPressed(KEY_E) || IsKeyPressed(KEY_T))
+    --m_health;
+    teleport(m_pos);
+
+    if (m_health <= 0)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+//TODO : look at Enemy::move()
+void Player::move(World& game, float deltaTime)
+{
+    if (m_inputs.teleporting)
     {
         teleport(game);
     }
@@ -105,7 +156,7 @@ void Player::move(World& game, float deltaTime, float gameSpeed)
     //        polygons.points[i] -= polygons.center;
     //    }
 
-    //    polygons.center += m_speed * m_thrust * deltaTime * gameSpeed;
+    //    polygons.center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
 
     //    for (int i = 0; i < polygons.count; ++i)
     //    {
@@ -118,7 +169,7 @@ void Player::move(World& game, float deltaTime, float gameSpeed)
 
 
 
-    m_shape.polygons[0].center += m_speed * m_thrust * deltaTime * gameSpeed;
+    m_shape.polygons[0].center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
 
     m_shape.polygons[0].center = m_local.posGlobalLocal(m_shape.polygons[0].center);
 
@@ -143,7 +194,7 @@ void Player::move(World& game, float deltaTime, float gameSpeed)
 
 
 
-    m_shape.polygons[1].center += m_speed * m_thrust * deltaTime * gameSpeed;
+    m_shape.polygons[1].center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
 
     m_shape.polygons[1].center = m_local.posGlobalLocal(m_shape.polygons[1].center);
 
@@ -167,9 +218,9 @@ void Player::move(World& game, float deltaTime, float gameSpeed)
     m_shape.polygons[1].center = m_local.posLocalGlobal(m_shape.polygons[1].center);
 }
 
-void Player::update(float deltaTime, float gameSpeed)
+void Player::update(float deltaTime, float m_gameSpeed)
 {
-    float rotation = ((double)IsKeyDown(KEY_G) - (double)IsKeyDown(KEY_D)) * 4 * M_PI / 180 * deltaTime * gameSpeed;
+    float rotation = (Math::toRadians((double)m_inputs.rotateRight - (double)m_inputs.rotateLeft) * 4 * deltaTime * m_gameSpeed);
 
     for (auto& polygons : m_shape.polygons)
     {
@@ -186,14 +237,20 @@ void Player::update(float deltaTime, float gameSpeed)
 
         float angle = m_speed.vectorAngle(m_direction);
 
-        if (fabsf(angle) >= M_PI / 2)
+        if (m_inputs.movingForward)
         {
-            m_speed = m_speed.vectorRotation(rotation);
+            if (fabsf(angle) >= M_PI / 2)
+            {
+                m_speed = m_speed.vectorRotation(rotation);
+            }
+            if (angle != 0)
+            {
+                m_speed = m_speed.vectorRotation(Math::toRadians(2 * angle / fabsf(angle)));
+            }
         }
-
-        if (angle != 0)
+        else if (m_thrust == 0)
         {
-            m_speed = m_speed.vectorRotation(2 * M_PI / 180 * angle / fabsf(angle));
+            m_speed = m_direction;
         }
     }
 }

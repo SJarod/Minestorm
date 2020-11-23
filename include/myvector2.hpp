@@ -61,15 +61,22 @@ public:
     //returns point's rotation arround a given point
     MyVector2 pointRotation(MyVector2 origin, float angle);
 
+    MyVector2 maxVect(MyVector2 vect);
+    MyVector2 minVect(MyVector2 vect);
+
     bool       operator!=(MyVector2 vect) const;
 
     MyVector2& operator=(MyVector2 vect);
+
     MyVector2  operator-(MyVector2 vect) const;
     MyVector2& operator-=(MyVector2 vect);
+
     MyVector2  operator+(MyVector2 vect) const;
     MyVector2& operator+=(MyVector2 vect);
+
     MyVector2  operator*(float val) const;
     MyVector2& operator*=(float val);
+
     MyVector2  operator/(float val) const;
     MyVector2& operator/=(float val);
 };

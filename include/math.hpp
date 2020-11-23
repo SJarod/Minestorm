@@ -10,6 +10,8 @@ namespace Math
 
 	float clamp(float val, float mini, float maxi);
 
+	float toRadians(float angle);
+
 	//returns randome float between min and max
 	float random(int min, int max);
 }

@@ -103,6 +103,7 @@
     <ClCompile Include="src\world.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\aabb.hpp" />
     <ClInclude Include="include\bullet.hpp" />
     <ClInclude Include="include\collisiondetection.hpp" />
     <ClInclude Include="include\enemy.hpp" />

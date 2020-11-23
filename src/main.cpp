@@ -1,4 +1,7 @@
 
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #include <raylib.h>
 
 #include <time.h>
@@ -17,6 +20,8 @@
 
 int main(int argc, char* argv[])
 {
+    _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     // Initialization
     //--------------------------------------------------------------------------------------
     int screenWidth = 640;
@@ -26,14 +31,8 @@ int main(int argc, char* argv[])
 
     World game(screenWidth, screenHeight);
 
-    //TODO : menu
-
-    game.m_players.push_back(Player(game));
-
     InitWindow(screenWidth, screenHeight, "minestorm");
     SetTargetFPS(60);
-
-    int moving = 0;
 
     Texture2D texBackGround = LoadTexture("Assets/minestorm_background.png");
     Texture2D texHUD = LoadTexture("Assets/minestorm_forground.png");
@@ -45,6 +44,24 @@ int main(int argc, char* argv[])
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
+        if (game.m_menu == MENU)
+        {
+            if (IsKeyPressed(KEY_F))
+            {
+                game.m_playerCount = 1;
+                game.m_players.push_back(new Player(game.m_center));
+                game.m_menu = ONE;
+            }
+            else if (IsKeyPressed(KEY_K))
+            {
+                game.m_playerCount = 2;
+                game.m_players.push_back(new Player({ game.m_center.x - 100, game.m_center.y }));
+                game.m_players.push_back(new Player({ game.m_center.x + 100, game.m_center.y }));
+                (*(game.m_players.end() - 1))->setSecondPlayer();
+                game.m_menu = TWO;
+            }
+        }
+
         deltaTime = GetFrameTime() * 50;
         currentTime = GetTime();
 
@@ -53,114 +70,36 @@ int main(int argc, char* argv[])
 
         //TODO : move all to a function gameLoop();
 
+        //TODO : spawning enemies
+        //TODO : advanced enemy types
+        //TODO : free memory leaks
+            //https://www.fluentcpp.com/2018/09/18/how-to-remove-pointers-from-a-vector-in-cpp/
+            //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch06s05.html
+
+        //TODO : destroy all enemies when game over
+
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
-        for (auto& players : game.m_players)
+        if (game.m_menu == MENU)
         {
-            //TODO : move moving variable in player.cpp,Player::move();
-            moving = IsKeyDown(KEY_R) * 2 - 1;  //true : moving = 1, false : moving = -1
-            players.m_thrust += moving / 10.f * deltaTime * game.m_gameSpeed;
-            players.m_thrust = Math::clamp(players.m_thrust, 0, 7);
-
-            for (auto& polygons : players.m_shape.polygons)
-                polygons.angle += (IsKeyDown(KEY_D) - IsKeyDown(KEY_G)) * 4 * deltaTime * game.m_gameSpeed;
-
-            game.playerOnEdge(players);
-
-            for (auto& enemies : game.m_enemies)
-            {
-                game.enemyOnEdge(enemies);
-            }
-
-            players.update(deltaTime, game.m_gameSpeed);
-            players.move(game, deltaTime, game.m_gameSpeed);
-
-            for (auto& enemies : game.m_enemies)
-            {
-                enemies.move(game, deltaTime, game.m_gameSpeed);
-            }
-
-            if (IsKeyDown(KEY_F))
-            {
-                if (currentTime - previousTime >= 0.1f / deltaTime)
-                {
-                    previousTime = GetTime();
-                    players.shoot(previousTime);
-                }
-            }
-
-            int index = 0;
-            for (auto& enemies : game.m_enemies)
-            {
-                if (Collide::cBulletEnemy(players, enemies))
-                {
-                    game.m_enemies.erase(game.m_enemies.begin() + index);
-                }
-                ++index;
-            }
-
-            for (auto& bullets : players.m_bullet)
-            {
-                if (currentTime - bullets.m_lifeTime >= 1.f / deltaTime)
-                {
-                    players.m_bullet.erase(players.m_bullet.begin());
-                }
-
-                bullets.move(deltaTime, game.m_gameSpeed);
-                game.bulletOnEdge(bullets);
-                bullets.draw(YELLOW);
-            }
-
-            index = 0;
-            for (auto& enemies : game.m_enemies)
-            {
-                if (Collide::cPlayerEnemy(players, enemies))
-                {
-                    enemies.draw(RED);
-                    game.m_enemies.erase(game.m_enemies.begin() + index);
-                    //TODO : delete player
-                    game.m_players.pop_back();
-                }
-                else
-                {
-                    enemies.draw(GREEN);
-                }
-                ++index;
-            }
-
-            players.draw(WHITE);
+            game.displayMenu();
+        }
+        else if (game.m_menu == ONE)
+        {
+            game.displayHUD();
+            game.gameLoopSingleplayer(deltaTime, currentTime);
+        }
+        else if (game.m_menu == TWO)
+        {
+            game.displayHUD();
+            game.gameLoopMultiplayer(deltaTime, currentTime);
+        }
+        else if (game.m_menu == OVER)
+        {
+            game.displayGameOver();
         }
 
-        if (IsKeyPressed(KEY_KP_1))
-        {
-            game.m_enemies.push_back(FloatingMine(game));
-            (game.m_enemies.end() - 1)->teleport(game);
-        }
-        else if (IsKeyPressed(KEY_KP_2))
-        {
-            game.m_enemies.push_back(FireballMine(game));
-            (game.m_enemies.end() - 1)->teleport(game);
-        }
-        else if (IsKeyPressed(KEY_KP_3))
-        {
-            game.m_enemies.push_back(MagneticMine(game));
-            (game.m_enemies.end() - 1)->teleport(game);
-        }
-        else if (IsKeyPressed(KEY_KP_4))
-        {
-            game.m_enemies.push_back(MagneticFireballMine(game));
-            (game.m_enemies.end() - 1)->teleport(game);
-        }
-        else if (IsKeyPressed(KEY_KP_5))
-        {
-            game.m_enemies.push_back(Minelayer(game));
-            (game.m_enemies.end() - 1)->teleport(game);
-        }
-        else if (IsKeyPressed(KEY_ENTER))
-        {
-            game.m_players.push_back(Player(game));
-            (game.m_players.end() - 1)->teleport(game);
-        }
+        printf("X : %d, Y : %d\r", GetMouseX(), GetMouseY());
 
         DrawTexture(texHUD, 0, 0, RAYWHITE);
 

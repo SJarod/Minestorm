@@ -249,6 +249,42 @@ bool	Collide::cPlayerEnemy(Player& player, Enemy& enemy)
     return false;
 }
 
+bool	Collide::cPlayerPlayer(Player& player, Player& player2)
+{
+    for (auto& playerPolygons : player.m_shape.polygons)
+    {
+        for (auto& player2Polygons : player2.m_shape.polygons)
+        {
+            for (int i = 0; i < playerPolygons.count; ++i)
+                playerPolygons.points[i] = player2.m_local.posGlobalLocal(playerPolygons.points[i]);
+
+            for (int i = 0; i < player2Polygons.count; ++i)
+                player2Polygons.points[i] = player2.m_local.posGlobalLocal(player2Polygons.points[i]);
+
+            if (Collide::cConvexConvex(playerPolygons, player2Polygons))
+            {
+                for (int i = 0; i < player2Polygons.count; ++i)
+                    player2Polygons.points[i] = player2.m_local.posLocalGlobal(player2Polygons.points[i]);
+
+                for (int i = 0; i < playerPolygons.count; ++i)
+                    playerPolygons.points[i] = player2.m_local.posLocalGlobal(playerPolygons.points[i]);
+
+                return true;
+            }
+            else
+            {
+                for (int i = 0; i < player2Polygons.count; ++i)
+                    player2Polygons.points[i] = player2.m_local.posLocalGlobal(player2Polygons.points[i]);
+
+                for (int i = 0; i < playerPolygons.count; ++i)
+                    playerPolygons.points[i] = player2.m_local.posLocalGlobal(playerPolygons.points[i]);
+            }
+        }
+    }
+
+    return false;
+}
+
 bool	Collide::cBulletEnemy(Player& player, Enemy& enemy)
 {
     for (auto& enemyPolygons : enemy.m_shape.polygons)

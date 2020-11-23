@@ -17,12 +17,12 @@ protected:
 public:
 	Enemy();
 	Enemy(World& game);
-	~Enemy();
+	virtual ~Enemy();
 
 	void drawSpawnPoint();
 	void spawn();
 
-	void move(World& game, float deltaTime, float gameSpeed);
+	virtual void move(World& game, float deltaTime);
 };
 
 class FloatingMine : public Enemy
@@ -50,6 +50,8 @@ private:
 public:
 	MagneticMine();
 	MagneticMine(World& game);
+
+	void move(World& game, float deltaTime) override;
 };
 
 class MagneticFireballMine : public Enemy
@@ -59,6 +61,8 @@ private:
 public:
 	MagneticFireballMine();
 	MagneticFireballMine(World& game);
+
+	void move(World& game, float deltaTime) override;
 };
 
 class Fireball : public Enemy

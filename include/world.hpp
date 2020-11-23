@@ -9,27 +9,45 @@
 
 class Bullet;
 
+enum GameMode
+{
+	MENU,
+	ONE,
+	TWO,
+	OVER
+};
+
 class World
 {
 private:
-	int level = 1;
+	int m_level = 1;
+	int m_score;
 	int screenWidth, screenHeight;
 
 public:
 	MyVector2	m_center;
 	float		m_gameSpeed;
+	GameMode	m_menu = MENU;
 
-	std::vector<Player> m_players;
-	std::vector<Enemy>	m_enemies;
+	int						m_playerCount = 1;
+	std::vector<Player*>	m_players;
+	std::vector<Enemy*>		m_enemies;
 
 	World();
 	World(int screenWidth, int screenHeight);
+	~World();
 
-	int getScreenWidth();
-	int getScreenHeight();
+	int getScreenWidth(int dif);
+	int getScreenHeight(int dif);
 
-	//TODO : remove all parameters for OnEdge function (for player and enemy), already in the object game
-	void playerOnEdge(Player& player);
-	void bulletOnEdge(Bullet& bullet);
-	void enemyOnEdge(Enemy& enemy);
+	void displayMenu();
+	void displayHUD();
+	void displayGameOver();
+
+	void gameLoopSingleplayer(float deltaTime, float currentTime);
+	void gameLoopMultiplayer(float deltaTime, float currentTime);
+
+	void playerOnEdge();
+	void bulletOnEdge();
+	void enemyOnEdge();
 };

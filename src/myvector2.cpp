@@ -172,6 +172,16 @@ MyVector2 MyVector2::pointRotation(MyVector2 origin, float angle)
     return rpoint;
 }
 
+MyVector2 MyVector2::maxVect(MyVector2 vect)
+{
+    return MyVector2(Math::max(x, vect.x), Math::max(y, vect.y));
+}
+
+MyVector2 MyVector2::minVect(MyVector2 vect)
+{
+    return MyVector2(Math::min(x, vect.x), Math::min(y, vect.y));
+}
+
 bool MyVector2::operator!=(MyVector2 vect) const
 {
     return x != vect.x && y != vect.y;
