@@ -32,6 +32,7 @@
     <ClInclude Include="include\collisiondetection.hpp" />
     <ClInclude Include="include\myrange.hpp" />
     <ClInclude Include="include\aabb.hpp" />
+    <ClInclude Include="include\constvariables.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="include\world.hpp" />

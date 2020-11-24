@@ -21,13 +21,13 @@ struct PlayerInput
 class Player : public Entity
 {
 private:
-	int m_id = 1;
-	int	m_health = 3;
+	int			m_id = 1;
+	int			m_health = 3;
 
-	MyVector2 m_pos;
+	MyVector2	m_pos;
 
 public:
-	Color m_color = { 128, 128, 255, 255 };
+	Color	m_color = { 128, 128, 255, 255 };
 
 	PlayerInput			m_inputs;
 	std::vector<Bullet> m_bullet;
@@ -37,15 +37,15 @@ public:
 	Player(MyVector2 pos);
 	~Player();
 
-	int getId() const;
-	int getHealth() const;
-	void addHealth();
+	int		getId() const;
+	int		getHealth() const;
+	void	addHealth();
 	
-	void setSecondPlayer();
-	void setInputs();
+	void	setSecondPlayer();
+	void	setInputs();
 
-	void shoot(float currentTime);
-	bool isHit();
-	void move(World& game, float deltaTime);
-	void update(float deltaTime, float gameSpeed);
+	void	shoot(float currentTime);
+	bool	isHit();
+	void	move(World& game, float deltaTime);
+	void	update(float deltaTime, float gameSpeed);
 };

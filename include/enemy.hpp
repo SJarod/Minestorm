@@ -31,6 +31,7 @@ public:
 
 	virtual void	move(World& game, float deltaTime);
 	virtual bool	shoot();
+	virtual void	addScore(int& score);
 
 	void			divide(World& game);
 };
@@ -42,6 +43,8 @@ private:
 public:
 	FloatingMine();
 	FloatingMine(World& game, EnemySize size);
+
+	void addScore(int& score);
 };
 
 class FireballMine : public Enemy
@@ -53,6 +56,7 @@ public:
 	FireballMine(World& game, EnemySize size);
 
 	bool shoot();
+	void addScore(int& score);
 };
 
 class MagneticMine : public Enemy
@@ -64,6 +68,7 @@ public:
 	MagneticMine(World& game, EnemySize size);
 
 	void move(World& game, float deltaTime) override;
+	void addScore(int& score);
 };
 
 class MagneticFireballMine : public Enemy
@@ -74,9 +79,10 @@ public:
 	MagneticFireballMine();
 	MagneticFireballMine(World& game, EnemySize size);
 
-	void move(World& game, float deltaTime) override;
+	void	move(World& game, float deltaTime) override;
 
-	bool shoot();
+	bool	shoot();
+	void	addScore(int& score);
 };
 
 class Fireball
@@ -104,4 +110,6 @@ private:
 public:
 	Minelayer();
 	Minelayer(World& game);
+
+	void addScore(int& score);
 };

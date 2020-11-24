@@ -21,6 +21,11 @@ World::World(int screenWidth, int screenHeight)
 	m_center.x = (float)screenWidth / 2;
 	m_center.y = (float)screenHeight / 2;
 
+    m_corners[0] = { 0.f, 0.f };
+    m_corners[1] = { (float)screenWidth, 0.f };
+    m_corners[2] = { (float)screenWidth, (float)screenHeight };
+    m_corners[3] = { 0.f, (float)screenHeight };
+
     m_spawnPoint = new MyVector2[14];
 }
 
@@ -146,6 +151,7 @@ void World::setGame()
     m_spawnNum = 13;
     m_spawnTime = GetTime();
     m_enemyNum = 2;
+    m_minelayerNum = 1;
 
     for (int i = 0; i < m_spawnNum; ++i)
     {
@@ -171,26 +177,34 @@ void World::endGame()
 
 void World::nextLevel()
 {
-    if (m_spawnNum <= 0 && m_enemies.empty())
+    if (m_spawnNum <= 0)
     {
-        ++m_level;
-
-        for (auto& players : m_players)
+        if (m_enemies.empty())
         {
-            players->addHealth();
+            ++m_level;
+
+            for (auto& players : m_players)
+            {
+                players->addHealth();
+            }
+
+            m_spawnNum = 13;
+            m_spawnTime = GetTime();
+            m_enemyNum = 2;
+            m_minelayerNum = 1;
+
+            for (int i = 0; i < m_spawnNum; ++i)
+            {
+                MyVector2 pos;
+                pos.x = rand() % getScreenWidth(-200) + 100;
+                pos.y = rand() % getScreenHeight(-200) + 100;
+
+                m_spawnPoint[i] = pos;
+            }
         }
-
-        m_spawnNum = 13;
-        m_spawnTime = GetTime();
-        m_enemyNum = 2;
-
-        for (int i = 0; i < m_spawnNum; ++i)
+        else
         {
-            MyVector2 pos;
-            pos.x = rand() % getScreenWidth(-200) + 100;
-            pos.y = rand() % getScreenHeight(-200) + 100;
-
-            m_spawnPoint[i] = pos;
+            spawnMinelayer();
         }
     }
 }
@@ -216,7 +230,7 @@ void World::playerLoop(float deltaTime, float currentTime)
 
         if (players->m_inputs.shooting)
         {
-            if (currentTime - players->m_shootingTime >= 0.08f / deltaTime && m_gameSpeed > 0.f)
+            if (currentTime - players->m_shootingTime >= 0.9f / deltaTime && m_gameSpeed > 0.f)
             {
                 players->m_shootingTime = GetTime();
                 players->shoot(players->m_shootingTime);
@@ -235,38 +249,12 @@ void World::playerLoop(float deltaTime, float currentTime)
                     m_fireballs.push_back(temp);
                 }
 
-                m_score += 100;
+                enemies->addScore(m_score);
                 enemies->divide(*this);
                 m_enemies.erase(m_enemies.begin() + index);
 
                 break;
             }
-            ++index;
-        }
-
-        index = 0;
-        for (auto& fireballs : m_fireballs)
-        {
-            if (currentTime - fireballs.m_lifeTime >= 1.f / deltaTime && m_gameSpeed > 0.f)
-            {
-                m_fireballs.erase(m_fireballs.begin());
-            }
-
-            if (Collide::cFireballPlayer(fireballs, *m_players[0]))
-            {
-                m_fireballs.erase(m_fireballs.begin() + index);
-
-                if (players->isHit())
-                {
-                    players->~Player();
-                    m_players.pop_back();
-                    --m_playerCount;
-                }
-            }
-
-            fireballs.move(deltaTime, m_gameSpeed);
-            fireballs.draw(RED);
-
             ++index;
         }
 
@@ -336,6 +324,39 @@ void World::gameLoopSingleplayer(float deltaTime, float currentTime)
             {
                 enemies->draw(GREEN);
             }
+            ++index;
+        }
+    }
+
+    for (auto& players : m_players)
+    {
+        int index = 0;
+        for (auto& fireballs : m_fireballs)
+        {
+            if (Collide::cFireballPlayer(fireballs, *players))
+            {
+                m_fireballs.erase(m_fireballs.begin() + index);
+
+                if (players->isHit())
+                {
+                    players->~Player();
+                    m_players.pop_back();
+                    --m_playerCount;
+                }
+
+                break;
+            }
+
+            if (currentTime - fireballs.m_lifeTime >= 1.f / deltaTime && m_gameSpeed > 0.f)
+            {
+                m_fireballs.erase(m_fireballs.begin());
+
+                break;
+            }
+
+            fireballs.move(deltaTime, m_gameSpeed);
+            fireballs.draw(RED);
+
             ++index;
         }
     }
@@ -426,6 +447,41 @@ void World::gameLoopMultiplayer(float deltaTime, float currentTime)
         }
     }
 
+    pindex = 0;
+    for (auto& players : m_players)
+    {
+        int index = 0;
+        for (auto& fireballs : m_fireballs)
+        {
+            if (Collide::cFireballPlayer(fireballs, *players))
+            {
+                m_fireballs.erase(m_fireballs.begin() + index);
+
+                if (players->isHit())
+                {
+                    players->~Player();
+                    m_players.erase(m_players.begin() + pindex);
+                    --m_playerCount;
+                }
+
+                break;
+            }
+
+            if (currentTime - fireballs.m_lifeTime >= 1.f / deltaTime && m_gameSpeed > 0.f)
+            {
+                m_fireballs.erase(m_fireballs.begin());
+
+                break;
+            }
+
+            fireballs.move(deltaTime, m_gameSpeed);
+            fireballs.draw(RED);
+
+            ++index;
+            ++pindex;
+        }
+    }
+
     nextLevel();
 
     drawSpawnPoint();
@@ -481,14 +537,22 @@ void World::spawn(EnemySize size)
         m_enemies.push_back(new MagneticFireballMine(*this, size));
         (*(m_enemies.end() - 1))->teleport(m_spawnPoint[i]);
     }
-    if (num == 4)
-    {
-        m_enemies.push_back(new Minelayer(*this));
-        (*(m_enemies.end() - 1))->teleport(m_spawnPoint[i]);
-    }
 
     m_spawnPoint[i] = m_spawnPoint[m_spawnNum];
     --m_spawnNum;
+}
+
+void World::spawnMinelayer()
+{
+    if (m_minelayerNum == 0)
+        return;
+
+    int i = Math::random(0, 3);
+
+    m_enemies.push_back(new Minelayer(*this));
+    (*(m_enemies.end() - 1))->teleport(m_corners[i]);
+
+    --m_minelayerNum;
 }
 
 void World::playerOnEdge()

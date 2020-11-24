@@ -77,8 +77,8 @@ int main(int argc, char* argv[])
             //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch06s05.html
 
         //TODO : minelayer
-        //TODO : score depending on enemy type
         //TODO : multiplayer : respawn player if dead at end of wave
+        //TODO : enemy follows nearest player
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 

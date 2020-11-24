@@ -66,6 +66,11 @@ void Enemy::divide(World& game)
         return;
 }
 
+void Enemy::addScore(int& score)
+{
+
+}
+
 FloatingMine::FloatingMine()
 {
 
@@ -139,6 +144,16 @@ FloatingMine::FloatingMine(World& game, EnemySize size)
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
+}
+
+void FloatingMine::addScore(int& score)
+{
+    if (m_size == SMALL)
+        score += 100;
+    else if (m_size == MEDIUM)
+        score += 135;
+    else
+        score += 200;
 }
 
 FireballMine::FireballMine()
@@ -228,6 +243,16 @@ FireballMine::FireballMine(World& game, EnemySize size)
 bool FireballMine::shoot()
 {
     return true;
+}
+
+void FireballMine::addScore(int& score)
+{
+    if (m_size == SMALL)
+        score += 325;
+    else if (m_size == MEDIUM)
+        score += 360;
+    else
+        score += 425;
 }
 
 MagneticMine::MagneticMine()
@@ -334,6 +359,16 @@ void MagneticMine::move(World& game, float deltaTime)
     }
 }
 
+void MagneticMine::addScore(int& score)
+{
+    if (m_size == SMALL)
+        score += 500;
+    else if (m_size == MEDIUM)
+        score += 535;
+    else
+        score += 600;
+}
+
 MagneticFireballMine::MagneticFireballMine()
 {
 
@@ -438,6 +473,16 @@ bool MagneticFireballMine::shoot()
     return true;
 }
 
+void MagneticFireballMine::addScore(int& score)
+{
+    if (m_size == SMALL)
+        score += 750;
+    else if (m_size == MEDIUM)
+        score += 800;
+    else
+        score += 850;
+}
+
 Fireball::Fireball()
 {
 
@@ -540,4 +585,9 @@ Minelayer::Minelayer(World& game)
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
     }
+}
+
+void Minelayer::addScore(int& score)
+{
+    score += 1000;
 }

@@ -26,12 +26,15 @@ private:
 
 public:
 	MyVector2	m_center;
+	MyVector2	m_corners[4];
+
 	float		m_gameSpeed;
 	GameMode	m_menu = MENU;
 
 	int			m_spawnNum;
 	float		m_spawnTime = 0.f;
 	int			m_enemyNum = 2;
+	int			m_minelayerNum = 1;
 
 	int						m_playerCount = 1;
 	std::vector<Player*>	m_players;
@@ -61,10 +64,12 @@ public:
 	void nextLevel();
 
 	void playerLoop(float deltaTime, float currentTime);
+	void movingLoop(float deltaTime);
 	void playerDraw();
 
 	void drawSpawnPoint();
 	void spawn(EnemySize size);
+	void spawnMinelayer();
 
 	void playerOnEdge();
 	void bulletOnEdge();
