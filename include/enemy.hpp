@@ -106,10 +106,15 @@ public:
 class Minelayer : public Enemy
 {
 private:
+	MyVector2	m_spawnPoint;
+	bool		m_arrived = false;
 
 public:
 	Minelayer();
 	Minelayer(World& game);
+
+	void move(World& game, float deltaTime) override;
+	void arrived(World& game);
 
 	void addScore(int& score);
 };

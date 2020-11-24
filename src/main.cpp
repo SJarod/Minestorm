@@ -76,7 +76,6 @@ int main(int argc, char* argv[])
             //https://www.fluentcpp.com/2018/09/18/how-to-remove-pointers-from-a-vector-in-cpp/
             //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch06s05.html
 
-        //TODO : minelayer
         //TODO : multiplayer : respawn player if dead at end of wave
         //TODO : enemy follows nearest player
 

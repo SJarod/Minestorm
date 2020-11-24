@@ -98,7 +98,7 @@ FloatingMine::FloatingMine(World& game, EnemySize size)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed.normalizeVect();
+    m_speed = m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -185,7 +185,7 @@ FireballMine::FireballMine(World& game, EnemySize size)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed.normalizeVect();
+    m_speed = m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -284,7 +284,7 @@ MagneticMine::MagneticMine(World& game, EnemySize size)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed.normalizeVect();
+    m_speed = m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -398,7 +398,7 @@ MagneticFireballMine::MagneticFireballMine(World& game, EnemySize size)
 
     m_direction = { 0.f, -1.f };
     m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed.normalizeVect();
+    m_speed = m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -500,7 +500,7 @@ Fireball::Fireball(MyVector2 c, MyVector2 dir, float lifeTime)
 
 void Fireball::move(float deltaTime, float gameSpeed)
 {
-    m_shape.center += m_direction * 10 * deltaTime * gameSpeed;
+    m_shape.center += m_direction * 2 * deltaTime * gameSpeed;
 }
 
 void Fireball::draw(Color color) const
@@ -538,8 +538,6 @@ Minelayer::Minelayer(World& game)
     points[9].y = game.m_center.y + 25;
 
     m_direction = { 0.f, -1.f };
-    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed.normalizeVect();
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -584,6 +582,61 @@ Minelayer::Minelayer(World& game)
         m_local.origin = game.m_center;
         m_local.ui = { 1.f, 0.f };
         m_local.uj = { 0.f, -1.f };
+    }
+
+    MyVector2 pos;
+    pos.x = rand() % game.getScreenWidth(-200) + 100;
+    pos.y = rand() % game.getScreenHeight(-200) + 100;
+
+    m_spawnPoint = pos;
+}
+
+void Minelayer::move(World& game, float deltaTime)
+{
+    if (m_shape.polygons[0].center != m_spawnPoint)
+    {
+        m_speed = m_shape.polygons[0].center.pointsVector(m_spawnPoint);
+        m_speed = m_speed.normalizeVect() * 2;
+    }
+    else
+        m_arrived = true;
+
+    for (auto& polygons : m_shape.polygons)
+    {
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] -= polygons.center;
+        }
+
+        polygons.center -= m_speed * 1 * deltaTime * game.m_gameSpeed;
+
+        for (int i = 0; i < polygons.count; ++i)
+        {
+            polygons.points[i] += polygons.center;
+        }
+    }
+
+    arrived(game);
+}
+
+void Minelayer::arrived(World& game)
+{
+    if (m_arrived)
+    {
+        if (game.m_spawnNum > 13)
+            return;
+
+        ++game.m_spawnNum;
+
+        game.m_spawnPoint[game.m_spawnNum] = m_shape.polygons[0].center;
+
+        MyVector2 pos;
+        pos.x = rand() % game.getScreenWidth(-200) + 100;
+        pos.y = rand() % game.getScreenHeight(-200) + 100;
+
+        m_spawnPoint = pos;
+
+        m_arrived = false;
     }
 }
 

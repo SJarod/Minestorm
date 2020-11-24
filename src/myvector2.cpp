@@ -184,7 +184,8 @@ MyVector2 MyVector2::minVect(MyVector2 vect)
 
 bool MyVector2::operator!=(MyVector2 vect) const
 {
-    return x != vect.x && y != vect.y;
+    return (x <= vect.x - 1 || x >= vect.x + 1) &&
+           (y <= vect.y - 1 || y >= vect.y + 1);
 }
 
 MyVector2& MyVector2::operator=(MyVector2 vect)

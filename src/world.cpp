@@ -173,6 +173,10 @@ void World::endGame()
     {
         m_enemies.pop_back();
     }
+    while (!m_fireballs.empty())
+    {
+        m_fireballs.pop_back();
+    }
 }
 
 void World::nextLevel()
@@ -230,7 +234,7 @@ void World::playerLoop(float deltaTime, float currentTime)
 
         if (players->m_inputs.shooting)
         {
-            if (currentTime - players->m_shootingTime >= 0.9f / deltaTime && m_gameSpeed > 0.f)
+            if (currentTime - players->m_shootingTime >= 0.09f / deltaTime && m_gameSpeed > 0.f)
             {
                 players->m_shootingTime = GetTime();
                 players->shoot(players->m_shootingTime);
@@ -347,7 +351,7 @@ void World::gameLoopSingleplayer(float deltaTime, float currentTime)
                 break;
             }
 
-            if (currentTime - fireballs.m_lifeTime >= 1.f / deltaTime && m_gameSpeed > 0.f)
+            if (currentTime - fireballs.m_lifeTime >= 3.f / deltaTime && m_gameSpeed > 0.f)
             {
                 m_fireballs.erase(m_fireballs.begin());
 
@@ -368,6 +372,11 @@ void World::gameLoopSingleplayer(float deltaTime, float currentTime)
     {
         spawn(BIG);
         --m_enemyNum;
+        m_spawnTime = GetTime();
+    }
+    else if (currentTime - m_spawnTime >= 3.f && m_spawnNum >= 0 && m_minelayerNum == 0)
+    {
+        spawn(SMALL);
         m_spawnTime = GetTime();
     }
 
@@ -467,7 +476,7 @@ void World::gameLoopMultiplayer(float deltaTime, float currentTime)
                 break;
             }
 
-            if (currentTime - fireballs.m_lifeTime >= 1.f / deltaTime && m_gameSpeed > 0.f)
+            if (currentTime - fireballs.m_lifeTime >= 3.f / deltaTime && m_gameSpeed > 0.f)
             {
                 m_fireballs.erase(m_fireballs.begin());
 
@@ -489,6 +498,11 @@ void World::gameLoopMultiplayer(float deltaTime, float currentTime)
     {
         spawn(BIG);
         --m_enemyNum;
+        m_spawnTime = GetTime();
+    }
+    else if (currentTime - m_spawnTime >= 3.f && m_spawnNum >= 0 && m_minelayerNum == 0)
+    {
+        spawn(SMALL);
         m_spawnTime = GetTime();
     }
 
@@ -514,7 +528,7 @@ void World::drawSpawnPoint()
 
 void World::spawn(EnemySize size)
 {
-    int num = Math::random(0, 3);
+    int num = Math::random(0, 4);
     int i = Math::random(0, m_spawnNum);
 
     if (num == 0)
