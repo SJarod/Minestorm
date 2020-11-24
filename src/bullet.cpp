@@ -1,10 +1,5 @@
 #include "bullet.hpp"
 
-Bullet::Bullet()
-{
-
-}
-
 Bullet::Bullet(MyVector2 c, MyVector2 dir, float lifeTime)
 {
 	m_shape.center = c;

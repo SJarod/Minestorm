@@ -5,7 +5,7 @@
 class MyCircle
 {
 public:
-    MyCircle();
+    MyCircle() = default;
     MyCircle(MyVector2 c, float r);
 
     MyVector2   center;

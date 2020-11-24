@@ -7,12 +7,11 @@ class MyConvexPolygon
 public:
     MyVector2   center;
 
-    //TODO : std::vector
     MyVector2*  points;    //array of points
     int         count;
 
     float       angle;
 
-    MyConvexPolygon();
+    MyConvexPolygon() = default;
     MyConvexPolygon(MyVector2* ptr);
 };

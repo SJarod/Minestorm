@@ -44,14 +44,14 @@ int main(int argc, char* argv[])
     // Main game loop
     while (!WindowShouldClose())    // Detect window close button or ESC key
     {
-        if (game.m_menu == MENU)
+        if (game.m_menu == GameMode::MENU)
         {
             if (IsKeyPressed(KEY_F))
             {
                 game.m_playerCount = 1;
                 game.m_players.push_back(new Player(game.m_center));
                 game.setGame();
-                game.m_menu = ONE;
+                game.m_menu = GameMode::ONE;
             }
             else if (IsKeyPressed(KEY_K))
             {
@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
                 game.m_players.push_back(new Player({ game.m_center.x + 100, game.m_center.y }));
                 (*(game.m_players.end() - 1))->setSecondPlayer();
                 game.setGame();
-                game.m_menu = TWO;
+                game.m_menu = GameMode::TWO;
             }
         }
 
@@ -77,11 +77,10 @@ int main(int argc, char* argv[])
             //https://www.oreilly.com/library/view/c-cookbook/0596007612/ch06s05.html
 
         //TODO : multiplayer : respawn player if dead at end of wave
-        //TODO : enemy follows nearest player
 
         DrawTexture(texBackGround, 0, 0, RAYWHITE);
 
-        if (game.m_menu == MENU)
+        if (game.m_menu == GameMode::MENU)
         {
             game.displayMenu();
         }
@@ -89,17 +88,17 @@ int main(int argc, char* argv[])
         {
             game.displayPause();
         }
-        else if (game.m_menu == ONE)
+        else if (game.m_menu == GameMode::ONE)
         {
             game.displayHUD();
             game.gameLoopSingleplayer(deltaTime, currentTime);
         }
-        else if (game.m_menu == TWO)
+        else if (game.m_menu == GameMode::TWO)
         {
             game.displayHUD();
             game.gameLoopMultiplayer(deltaTime, currentTime);
         }
-        else if (game.m_menu == OVER)
+        else if (game.m_menu == GameMode::OVER)
         {
             game.displayGameOver();
             game.endGame();

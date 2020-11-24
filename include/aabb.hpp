@@ -4,6 +4,7 @@
 
 #include "myvector2.hpp"
 
+//TODO : add to the collision detection (SAT)
 class AABB2
 {
 public:

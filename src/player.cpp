@@ -9,11 +9,6 @@
 #include "world.hpp"
 #include "player.hpp"
 
-Player::Player()
-{
-
-}
-
 Player::Player(MyVector2 pos)
 {
     MyVector2* points = new MyVector2[4];
@@ -150,31 +145,7 @@ void Player::move(World& game, float deltaTime)
         teleport(game);
     }
 
-
-
-    //for (auto& polygons : m_shape.polygons)
-    //{
-    //    polygons.center = m_local.posGlobalLocal(polygons.center);
-
-    //    for (int i = 0; i < polygons.count; ++i)
-    //    {
-    //        polygons.points[i] = m_local.posGlobalLocal(polygons.points[i]);
-    //        polygons.points[i] -= polygons.center;
-    //    }
-
-    //    polygons.center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
-
-    //    for (int i = 0; i < polygons.count; ++i)
-    //    {
-    //        polygons.points[i] += polygons.center;
-    //        polygons.points[i] = m_local.posLocalGlobal(polygons.points[i]);
-    //    }
-
-    //    polygons.center = m_local.posLocalGlobal(polygons.center);
-    //}
-
-
-
+    //polygons[0]---------------------------------------------------------------------------------------------------
     m_shape.polygons[0].center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
 
     m_shape.polygons[0].center = m_local.posGlobalLocal(m_shape.polygons[0].center);
@@ -199,7 +170,7 @@ void Player::move(World& game, float deltaTime)
     m_shape.polygons[0].center = m_local.posLocalGlobal(m_shape.polygons[0].center);
 
 
-
+    //polygons[1]-----------------------------------------------------------------------------------------------------
     m_shape.polygons[1].center += m_speed * m_thrust * deltaTime * game.m_gameSpeed;
 
     m_shape.polygons[1].center = m_local.posGlobalLocal(m_shape.polygons[1].center);
@@ -247,7 +218,7 @@ void Player::update(float deltaTime, float m_gameSpeed)
         {
             if (fabsf(angle) >= M_PI / 2)
             {
-                m_speed = m_speed.vectorRotation(rotation);
+                m_speed = m_speed.vectorRotation(angle - (M_PI / 2) * (angle / fabsf(angle)));
             }
             if (angle != 0)
             {

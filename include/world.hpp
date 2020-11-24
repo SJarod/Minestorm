@@ -9,12 +9,12 @@
 
 class Bullet;
 
-enum GameMode
+enum class GameMode
 {
 	MENU,
 	ONE,
 	TWO,
-	OVER,
+	OVER
 };
 
 class World
@@ -29,7 +29,7 @@ public:
 	MyVector2	m_corners[4];
 
 	float		m_gameSpeed;
-	GameMode	m_menu = MENU;
+	GameMode	m_menu = GameMode::MENU;
 
 	int			m_spawnNum;
 	float		m_spawnTime = 0.f;
@@ -44,7 +44,7 @@ public:
 
 	MyVector2*				m_spawnPoint;
 
-	World();
+	World() = default;
 	World(int screenWidth, int screenHeight);
 	~World();
 

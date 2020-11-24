@@ -33,7 +33,7 @@ public:
 	std::vector<Bullet> m_bullet;
 	float				m_shootingTime = 0.f;
 
-	Player();
+	Player() = default;
 	Player(MyVector2 pos);
 	~Player();
 

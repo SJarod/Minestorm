@@ -4,16 +4,6 @@
 
 #include "world.hpp"
 
-Enemy::Enemy()
-{
-
-}
-
-Enemy::Enemy(World& game)
-{
-    
-}
-
 Enemy::~Enemy()
 {
     delete[] m_shape.points;
@@ -52,15 +42,15 @@ void Enemy::divide(World& game)
     if (game.m_spawnNum <= 0)
         return;
 
-    if (m_size == BIG)
+    if (m_size == EnemySize::BIG)
     {
-        game.spawn(MEDIUM);
-        game.spawn(MEDIUM);
+        game.spawn(EnemySize::MEDIUM);
+        game.spawn(EnemySize::MEDIUM);
     }
-    else if (m_size == MEDIUM)
+    else if (m_size == EnemySize::MEDIUM)
     {
-        game.spawn(SMALL);
-        game.spawn(SMALL);
+        game.spawn(EnemySize::SMALL);
+        game.spawn(EnemySize::SMALL);
     }
     else
         return;
@@ -71,16 +61,11 @@ void Enemy::addScore(int& score)
 
 }
 
-FloatingMine::FloatingMine()
-{
-
-}
-
 FloatingMine::FloatingMine(World& game, EnemySize size)
 {
     m_size = size;
 
-    float finalSize = size;
+    float finalSize = (float)size;
     if (finalSize == 0)
         finalSize = 0.5;
 
@@ -148,24 +133,19 @@ FloatingMine::FloatingMine(World& game, EnemySize size)
 
 void FloatingMine::addScore(int& score)
 {
-    if (m_size == SMALL)
+    if (m_size == EnemySize::SMALL)
         score += 100;
-    else if (m_size == MEDIUM)
+    else if (m_size == EnemySize::MEDIUM)
         score += 135;
     else
         score += 200;
-}
-
-FireballMine::FireballMine()
-{
-
 }
 
 FireballMine::FireballMine(World& game, EnemySize size)
 {
     m_size = size;
 
-    float finalSize = size;
+    float finalSize = (float)size;
     if (finalSize == 0)
         finalSize = 0.5;
 
@@ -247,24 +227,19 @@ bool FireballMine::shoot()
 
 void FireballMine::addScore(int& score)
 {
-    if (m_size == SMALL)
+    if (m_size == EnemySize::SMALL)
         score += 325;
-    else if (m_size == MEDIUM)
+    else if (m_size == EnemySize::MEDIUM)
         score += 360;
     else
         score += 425;
-}
-
-MagneticMine::MagneticMine()
-{
-
 }
 
 MagneticMine::MagneticMine(World& game, EnemySize size)
 {
     m_size = size;
 
-    float finalSize = size;
+    float finalSize = (float)size;
     if (finalSize == 0)
         finalSize = 0.5;
 
@@ -283,8 +258,13 @@ MagneticMine::MagneticMine(World& game, EnemySize size)
     points[8] = points[6].vectorRotation(M_PI / 2);
 
     m_direction = { 0.f, -1.f };
-    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed = m_speed.normalizeVect();
+
+    for (auto& players : game.m_players)
+    {
+        ++m_target;
+    }
+    m_target = Math::random(0, m_target);
+
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -341,7 +321,7 @@ MagneticMine::MagneticMine(World& game, EnemySize size)
 
 void MagneticMine::move(World& game, float deltaTime)
 {
-    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[0]->m_shape.polygons[0].center).normalizeVect();
+    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[m_target]->m_shape.polygons[0].center).normalizeVect();
 
     for (auto& polygons : m_shape.polygons)
     {
@@ -361,24 +341,19 @@ void MagneticMine::move(World& game, float deltaTime)
 
 void MagneticMine::addScore(int& score)
 {
-    if (m_size == SMALL)
+    if (m_size == EnemySize::SMALL)
         score += 500;
-    else if (m_size == MEDIUM)
+    else if (m_size == EnemySize::MEDIUM)
         score += 535;
     else
         score += 600;
-}
-
-MagneticFireballMine::MagneticFireballMine()
-{
-
 }
 
 MagneticFireballMine::MagneticFireballMine(World& game, EnemySize size)
 {
     m_size = size;
 
-    float finalSize = size;
+    float finalSize = (float)size;
     if (finalSize == 0)
         finalSize = 0.5;
 
@@ -397,8 +372,13 @@ MagneticFireballMine::MagneticFireballMine(World& game, EnemySize size)
     points[8] = points[6].vectorRotation(M_PI / 2);
 
     m_direction = { 0.f, -1.f };
-    m_speed = { Math::random(-1, 1), Math::random(-1, 1) };
-    m_speed = m_speed.normalizeVect();
+
+    for (auto& players : game.m_players)
+    {
+        ++m_target;
+    }
+    m_target = Math::random(0, m_target);
+
     m_thrust = 0.f;
 
     m_shape.points = points;
@@ -450,7 +430,7 @@ MagneticFireballMine::MagneticFireballMine(World& game, EnemySize size)
 
 void MagneticFireballMine::move(World& game, float deltaTime)
 {
-    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[0]->m_shape.polygons[0].center).normalizeVect();
+    m_speed = m_shape.polygons[0].center.pointsVector(game.m_players[m_target]->m_shape.polygons[0].center).normalizeVect();
 
     for (auto& polygons : m_shape.polygons)
     {
@@ -475,17 +455,12 @@ bool MagneticFireballMine::shoot()
 
 void MagneticFireballMine::addScore(int& score)
 {
-    if (m_size == SMALL)
+    if (m_size == EnemySize::SMALL)
         score += 750;
-    else if (m_size == MEDIUM)
+    else if (m_size == EnemySize::MEDIUM)
         score += 800;
     else
         score += 850;
-}
-
-Fireball::Fireball()
-{
-
 }
 
 Fireball::Fireball(MyVector2 c, MyVector2 dir, float lifeTime)
@@ -506,11 +481,6 @@ void Fireball::move(float deltaTime, float gameSpeed)
 void Fireball::draw(Color color) const
 {
     DrawCircle(m_shape.center.x, m_shape.center.y, m_shape.radius, color);
-}
-
-Minelayer::Minelayer()
-{
-
 }
 
 Minelayer::Minelayer(World& game)

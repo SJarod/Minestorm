@@ -9,11 +9,11 @@
 class World;
 class Fireball;
 
-enum EnemySize
+enum class EnemySize
 {
 	SMALL,
 	MEDIUM,
-	BIG,
+	BIG
 };
 
 class Enemy : public Entity
@@ -25,8 +25,7 @@ protected:
 
 public:
 
-	Enemy();
-	Enemy(World& game);
+	Enemy() = default;
 	virtual ~Enemy();
 
 	virtual void	move(World& game, float deltaTime);
@@ -41,7 +40,7 @@ class FloatingMine : public Enemy
 private:
 
 public:
-	FloatingMine();
+	FloatingMine() = default;
 	FloatingMine(World& game, EnemySize size);
 
 	void addScore(int& score);
@@ -52,7 +51,7 @@ class FireballMine : public Enemy
 private:
 
 public:
-	FireballMine();
+	FireballMine() = default;
 	FireballMine(World& game, EnemySize size);
 
 	bool shoot();
@@ -62,9 +61,10 @@ public:
 class MagneticMine : public Enemy
 {
 private:
+	int m_target = 0;
 
 public:
-	MagneticMine();
+	MagneticMine() = default;
 	MagneticMine(World& game, EnemySize size);
 
 	void move(World& game, float deltaTime) override;
@@ -74,9 +74,10 @@ public:
 class MagneticFireballMine : public Enemy
 {
 private:
+	int m_target = 0;
 
 public:
-	MagneticFireballMine();
+	MagneticFireballMine() = default;
 	MagneticFireballMine(World& game, EnemySize size);
 
 	void	move(World& game, float deltaTime) override;
@@ -95,7 +96,7 @@ public:
 
 	MyVector2	m_direction;
 
-	Fireball();
+	Fireball() = default;
 	Fireball(MyVector2 c, MyVector2 dir, float lifeTime);
 
 	void move(float deltaTime, float gameSpeed);
@@ -110,7 +111,7 @@ private:
 	bool		m_arrived = false;
 
 public:
-	Minelayer();
+	Minelayer() = default;
 	Minelayer(World& game);
 
 	void move(World& game, float deltaTime) override;

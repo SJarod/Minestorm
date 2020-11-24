@@ -10,7 +10,7 @@ public:
 	MyVector2*						points;
 	std::vector<MyConvexPolygon>	polygons;	//array of convex polygons
 
-	MyConcavePolygon();
+	MyConcavePolygon() = default;
 
 	MyConcavePolygon operator=(MyConvexPolygon convex);
 };

@@ -6,11 +6,6 @@
 #include "player.hpp"
 #include "bullet.hpp"
 
-World::World()
-{
-
-}
-
 World::World(int screenWidth, int screenHeight)
 {
     m_gameSpeed = 1.f;
@@ -84,7 +79,7 @@ void World::displayHUD()
     DrawText(TextFormat("SCORE : %d", m_score), m_center.x - 55, 100, 20, WHITE);
     DrawText("Pause : 'P'", 460, 680, 20, YELLOW);
 
-    if (m_menu == TWO)
+    if (m_menu == GameMode::TWO)
     {
         DrawText("PLAYER TWO", 420, 80, 20, RED);
 
@@ -121,7 +116,7 @@ void World::displayPause()
     }
     if (IsKeyPressed(KEY_ENTER))
     {
-        m_menu = MENU;
+        m_menu = GameMode::MENU;
         endGame();
     }
 }
@@ -137,7 +132,7 @@ void World::displayGameOver()
 
     if (IsKeyPressed(KEY_ENTER))
     {
-        m_menu = MENU;
+        m_menu = GameMode::MENU;
     }
 }
 
@@ -248,7 +243,7 @@ void World::playerLoop(float deltaTime, float currentTime)
             {
                 if (enemies->shoot())
                 {
-                    MyVector2 dir = m_players[0]->m_shape.polygons[0].center.pointsVector(enemies->m_shape.polygons[0].center).normalizeVect();
+                    MyVector2 dir = players->m_shape.polygons[0].center.pointsVector(enemies->m_shape.polygons[0].center).normalizeVect();
                     Fireball temp(enemies->m_shape.polygons[0].center, dir, currentTime);
                     m_fireballs.push_back(temp);
                 }
@@ -287,7 +282,7 @@ void World::playerDraw()
             m_players[0]->draw(m_players[0]->m_color);
             m_players[1]->draw(m_players[1]->m_color);
         }
-        else if (m_menu == TWO)
+        else if (m_menu == GameMode::TWO)
             m_players[0]->draw(m_players[0]->m_color);
         else
             m_players[0]->draw(WHITE);
@@ -370,13 +365,13 @@ void World::gameLoopSingleplayer(float deltaTime, float currentTime)
     drawSpawnPoint();
     if (currentTime - m_spawnTime >= 5.f && m_spawnNum >= 0 && m_enemyNum > 0)
     {
-        spawn(BIG);
+        spawn(EnemySize::BIG);
         --m_enemyNum;
         m_spawnTime = GetTime();
     }
     else if (currentTime - m_spawnTime >= 3.f && m_spawnNum >= 0 && m_minelayerNum == 0)
     {
-        spawn(SMALL);
+        spawn(EnemySize::SMALL);
         m_spawnTime = GetTime();
     }
 
@@ -387,7 +382,7 @@ void World::gameLoopSingleplayer(float deltaTime, float currentTime)
 
     if (m_playerCount == 0)
     {
-        m_menu = OVER;
+        m_menu = GameMode::OVER;
     }
 }
 
@@ -496,13 +491,13 @@ void World::gameLoopMultiplayer(float deltaTime, float currentTime)
     drawSpawnPoint();
     if (currentTime - m_spawnTime >= 5.f && m_spawnNum >= 0 && m_enemyNum > 0)
     {
-        spawn(BIG);
+        spawn(EnemySize::BIG);
         --m_enemyNum;
         m_spawnTime = GetTime();
     }
     else if (currentTime - m_spawnTime >= 3.f && m_spawnNum >= 0 && m_minelayerNum == 0)
     {
-        spawn(SMALL);
+        spawn(EnemySize::SMALL);
         m_spawnTime = GetTime();
     }
 
@@ -513,7 +508,7 @@ void World::gameLoopMultiplayer(float deltaTime, float currentTime)
 
     if (m_playerCount == 0)
     {
-        m_menu = OVER;
+        m_menu = GameMode::OVER;
     }
 }
 

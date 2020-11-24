@@ -14,7 +14,7 @@ public:
 
 	MyVector2	m_direction;
 
-	Bullet();
+	Bullet() = default;
 	Bullet(MyVector2 c, MyVector2 dir, float lifeTime);
 
 	void move(float deltaTime, float gameSpeed);
